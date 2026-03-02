@@ -1,2 +1,12 @@
 node_modules
 .env
+**/node_modules/
+**/.env
+**/.env.*
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+ai-study-assistant/chroma_db/
+ai-study-assistant/uploads/

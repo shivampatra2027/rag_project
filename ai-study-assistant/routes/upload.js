@@ -3,6 +3,7 @@ const fs = require('fs');
 const path = require('path');
 const multer = require('multer');
 const pdfParseLib = require('pdf-parse');
+const { storeDocument } = require('../rag/embeddings');
 
 const router = express.Router();
 const uploadsDir = path.join(__dirname, '..', 'uploads');
@@ -52,7 +53,7 @@ router.post('/upload', (req, res) => {
     }
 
     try {
-      const fileBuffer = fs.readFileSync(req.file.path);
+      const fileBuffer = await fs.promises.readFile(req.file.path);
       let text = '';
 
       if (typeof pdfParseLib === 'function') {
@@ -70,14 +71,14 @@ router.post('/upload', (req, res) => {
         throw new Error('Unsupported pdf-parse API');
       }
 
+      await storeDocument(text);
+
       return res.status(200).json({
-        message: 'PDF uploaded successfully',
-        textLength: text.length,
-        preview: text.slice(0, 500),
+        message: 'PDF uploaded and indexed successfully',
       });
     } catch (parseError) {
       return res.status(500).json({
-        message: 'Failed to parse PDF file',
+        message: 'Failed to process PDF file',
         error: parseError.message || 'Unknown parse error',
       });
     }
