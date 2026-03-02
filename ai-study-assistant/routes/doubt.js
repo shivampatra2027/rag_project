@@ -1,20 +1,27 @@
-const express = require('express');
+﻿const express = require('express');
 const axios = require('axios');
 const { doubtPrompt } = require('../rag/prompts');
+const { retrieveContext } = require('../rag/retriever');
 
 const router = express.Router();
 
 router.post('/doubt', async (req, res) => {
   try {
-    const { context, question } = req.body || {};
-
-    if (!context || typeof context !== 'string' || !context.trim()) {
-      return res.status(400).json({ message: 'Invalid input. Provide non-empty "context".' });
-    }
+    const { question } = req.body || {};
 
     if (!question || typeof question !== 'string' || !question.trim()) {
       return res.status(400).json({ message: 'Invalid input. Provide non-empty "question".' });
     }
+
+    console.log(`[RAG] retrieving context for: ${question}`);
+    const chunks = await retrieveContext(question);
+    console.log(`[RAG] chunks found: ${chunks.length}`);
+
+    if (!chunks.length) {
+      return res.status(404).json({ error: 'No study material uploaded yet' });
+    }
+
+    const context = chunks.join('\n\n');
 
     const apiKey = (process.env.GEMINI_API_KEY || '').trim();
     if (!apiKey) {
@@ -22,10 +29,11 @@ router.post('/doubt', async (req, res) => {
     }
 
     const model = (process.env.GEMINI_MODEL || 'gemini-2.5-flash').trim();
+    const modelPath = model.startsWith('models/') ? model : `models/${model}`;
     const prompt = `${doubtPrompt(context, question)}\n\nResponse style: Keep the answer concise, student-friendly, and easy to revise.`;
 
     const response = await axios.post(
-      `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`,
+      `https://generativelanguage.googleapis.com/v1beta/${modelPath}:generateContent`,
       {
         contents: [
           {
@@ -62,6 +70,10 @@ router.post('/doubt', async (req, res) => {
       error.response?.data?.message ||
       error.message ||
       'Unknown error';
+
+    if (upstreamMessage.toLowerCase().includes('does not exist') || upstreamMessage.toLowerCase().includes('not found')) {
+      return res.status(404).json({ error: 'No study material uploaded yet' });
+    }
 
     if (upstreamStatus) {
       return res.status(upstreamStatus).json({

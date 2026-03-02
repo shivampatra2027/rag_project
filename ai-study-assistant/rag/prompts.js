@@ -16,6 +16,8 @@ Rules:
 - Do not add outside facts.
 - Keep language simple and revision-friendly.
 - Use clear headings and bullet points.
+- Answer ONLY using provided study material context.
+- If answer is not found, say: 'Not found in uploaded notes.'
 `;
 }
 
@@ -42,6 +44,8 @@ Rules:
 - Include a balanced difficulty mix: easy, medium, hard.
 - Avoid ambiguous options.
 - Keep all answers fully supported by the context.
+- Answer ONLY using provided study material context.
+- If answer is not found, say: 'Not found in uploaded notes.'
 `;
 }
 
@@ -65,6 +69,8 @@ Rules:
 - Do not use external information.
 - If the context is insufficient, say exactly what is missing.
 - Keep the explanation accurate, concise, and exam-oriented.
+- Answer ONLY using provided study material context.
+- If answer is not found, say: 'Not found in uploaded notes.'
 `;
 }
 
