@@ -7,3 +7,4 @@ uploads/*
 **/.env.*
 ai-study-assistant/chroma_db/
 ai-study-assistant/uploads/
+frontend/dist
