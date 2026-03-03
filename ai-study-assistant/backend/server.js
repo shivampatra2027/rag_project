@@ -3,9 +3,11 @@ const cors = require('cors');
 const helmet = require('helmet');
 const dotenv = require('dotenv');
 const path = require('path');
-const userIdMiddleware = require('./middleware/userId');
+const connectDB = require('./config/db');
+const authMiddleware = require('./middleware/auth');
 const rateLimiter = require('./middleware/rateLimiter');
 const errorHandler = require('./middleware/errorHandler');
+const authRoutes = require('./routes/auth');
 const uploadRoutes = require('./routes/upload');
 const summarizeRoutes = require('./routes/summarize');
 const quizRoutes = require('./routes/quiz');
@@ -15,6 +17,9 @@ const predictRoutes = require('./routes/predict');
 const chatRoutes = require('./routes/chat');
 
 dotenv.config({ path: path.join(__dirname, '.env') });
+connectDB().catch((error) => {
+  console.error('[DB] connection failed', error.message || error);
+});
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -25,8 +30,6 @@ app.use(
   })
 );
 app.use(helmet());
-app.use(userIdMiddleware);
-app.use(rateLimiter);
 console.log('[SECURITY] rate limit active');
 
 app.use((req, res, next) => {
@@ -39,6 +42,8 @@ app.use((req, res, next) => {
 });
 
 app.use(express.json());
+app.use('/api/auth', rateLimiter, authRoutes);
+app.use('/api', authMiddleware, rateLimiter);
 app.use('/api', uploadRoutes);
 app.use('/api', summarizeRoutes);
 app.use('/api', quizRoutes);

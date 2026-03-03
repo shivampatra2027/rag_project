@@ -1,139 +1,80 @@
 ---
 
-## TASK 8 — Production UI Upgrade (shadcn/ui)
+## TASK AUTH — Google Login Frontend
 
 Goal:
-Upgrade frontend UI to production-quality using shadcn/ui components.
-
-Requirements:
+Allow users to sign in using Google account.
 
 ------------------------------------------------
 
-1. Install TailwindCSS (Vite setup)
+1. Install
 
-Configure Tailwind for React Vite project.
-
-Add:
-- tailwindcss
-- postcss
-- autoprefixer
-
-Create:
-tailwind.config.js
-postcss.config.js
-
-Enable Tailwind in index.css.
+npm install @react-oauth/google
 
 ------------------------------------------------
 
-2. Install shadcn/ui
+2. Wrap App
 
-Initialize shadcn:
+In main.jsx:
 
-npx shadcn-ui@latest init
-
-Configuration:
-- React
-- Tailwind
-- Default theme
-- CSS variables enabled
+<GoogleOAuthProvider clientId="YOUR_CLIENT_ID">
+   <App />
+</GoogleOAuthProvider>
 
 ------------------------------------------------
 
-3. Install Components
+3. Create Page
 
-Add:
+src/pages/Login.jsx
 
-button
-card
-input
-textarea
-scroll-area
-navbar (navigation menu)
-separator
-badge
-spinner (loader equivalent)
+Add GoogleLogin button.
 
 ------------------------------------------------
 
-4. Layout Upgrade
+4. On Success
 
-Create:
+Receive credential response.
 
-src/components/Layout.jsx
+Send to backend:
 
-Use shadcn Card + container layout.
+POST /api/auth/google
 
-App layout:
-
-Navbar (top)
-Main container (centered)
-Active page content
-
-------------------------------------------------
-
-5. Navbar Upgrade
-
-Create modern navbar using shadcn components:
-
-- sticky top
-- app title left
-- navigation buttons right
-- highlight active route
+Body:
+{
+  credential: response.credential
+}
 
 ------------------------------------------------
 
-6. Update Pages Using shadcn
+5. Store Auth
 
-Replace existing HTML elements with:
+Save:
+- token
+- user
 
-Upload.jsx:
-- Card
-- Button
-- Input
-
-Chat.jsx:
-- ScrollArea for messages
-- message bubbles styled with Tailwind
-- fixed input bar
-
-Quiz.jsx:
-- Card per question
-- Badge for answers
-
-Revision.jsx:
-- Card per day plan
-
-Prediction.jsx:
-- Card sections
-- Badge importance score
+inside authStore (zustand).
 
 ------------------------------------------------
 
-7. Loading States
+6. Axios Update
 
-Use spinner component while API requests run.
+Attach header automatically:
 
-------------------------------------------------
-
-8. Styling Rules
-
-- Clean SaaS dashboard look
-- soft gray background
-- max width container
-- responsive layout
-- spacing using Tailwind utilities
+Authorization: Bearer <token>
 
 ------------------------------------------------
 
-Constraints:
+7. Redirect
 
-- Do NOT change API logic
-- Only UI refactor
-- Reuse existing state logic
-- Must run immediately
+After login → Home page.
+
+------------------------------------------------
+
+8. Protected App
+
+If no token → show Login page.
 
 Rules:
-- Modify only required files
-- Return only modified files
-- No explanations
+- Do not change existing pages
+- Only add auth layer
+- Return modified files only

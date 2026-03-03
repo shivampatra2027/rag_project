@@ -7,9 +7,12 @@ import Chat from './pages/Chat';
 import Quiz from './pages/Quiz';
 import Revision from './pages/Revision';
 import Prediction from './pages/Prediction';
+import Login from './pages/Login';
+import useAuthStore from './store/authStore';
 
 function App() {
   const [currentPage, setCurrentPage] = useState('home');
+  const token = useAuthStore((state) => state.token);
 
   const pageContent = useMemo(() => {
     if (currentPage === 'upload') {
@@ -42,6 +45,10 @@ function App() {
       />
     );
   }, [currentPage]);
+
+  if (!token) {
+    return <Login />;
+  }
 
   return (
     <div className="min-h-screen bg-slate-100">
