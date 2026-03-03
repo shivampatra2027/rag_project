@@ -1,5 +1,10 @@
-﻿import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import apiClient from '../api/apiClient';
+import { Badge } from '../components/ui/badge';
+import { Button } from '../components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
+import { Input } from '../components/ui/input';
+import { Spinner } from '../components/ui/spinner';
 
 function normalizePlan(data) {
   if (Array.isArray(data)) {
@@ -67,34 +72,34 @@ function Revision({ onBack }) {
   };
 
   return (
-    <main style={{ padding: '2rem', fontFamily: 'sans-serif' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-        <h1 style={{ margin: 0 }}>Revision Planner</h1>
-        <button type="button" onClick={onBack}>
-          Back
-        </button>
-      </div>
-
-      <div style={{ display: 'grid', gap: '0.75rem', maxWidth: '420px', marginBottom: '1rem' }}>
-        <input type="date" value={examDate} onChange={(e) => setExamDate(e.target.value)} style={{ padding: '0.6rem' }} />
-        <input
-          type="number"
-          min="1"
-          max="12"
-          placeholder="Hours per day"
-          value={hoursPerDay}
-          onChange={(e) => setHoursPerDay(e.target.value)}
-          style={{ padding: '0.6rem' }}
-        />
-        <button type="button" onClick={generatePlan} disabled={!examDate || !hoursPerDay || loading}>
-          Generate Plan
-        </button>
-        {loading ? <p>Generating plan...</p> : null}
-        {error ? <p>{error}</p> : null}
-      </div>
+    <div className="space-y-4">
+      <Card className="max-w-2xl">
+        <CardHeader className="flex-row items-center justify-between space-y-0">
+          <CardTitle>Revision Planner</CardTitle>
+          <Button type="button" variant="outline" onClick={onBack}>
+            Back
+          </Button>
+        </CardHeader>
+        <CardContent className="space-y-3">
+          <Input type="date" value={examDate} onChange={(e) => setExamDate(e.target.value)} />
+          <Input
+            type="number"
+            min="1"
+            max="12"
+            placeholder="Hours per day"
+            value={hoursPerDay}
+            onChange={(e) => setHoursPerDay(e.target.value)}
+          />
+          <Button type="button" onClick={generatePlan} disabled={!examDate || !hoursPerDay || loading}>
+            {loading ? <Spinner className="mr-2" /> : null}
+            Generate Plan
+          </Button>
+          {error ? <p className="text-sm text-red-600">{error}</p> : null}
+        </CardContent>
+      </Card>
 
       {revisionPlan.length > 0 ? (
-        <section ref={resultRef} style={{ display: 'grid', gap: '1rem' }}>
+        <section ref={resultRef} className="grid gap-3">
           {revisionPlan.map((dayPlan, index) => {
             const topics = Array.isArray(dayPlan.topics)
               ? dayPlan.topics
@@ -103,28 +108,23 @@ function Revision({ onBack }) {
                 : [];
 
             return (
-              <article key={`day-${index}`} style={{ border: '1px solid #ddd', borderRadius: '8px', padding: '0.75rem' }}>
-                <p style={{ marginTop: 0 }}>
-                  <strong>Day {dayPlan.day || index + 1}</strong>
-                </p>
-                <p style={{ margin: '0.2rem 0' }}>
-                  <strong>Topics:</strong>
-                </p>
-                <ul style={{ marginTop: 0 }}>
-                  {topics.length ? topics.map((topic, i) => <li key={`topic-${index}-${i}`}>{topic}</li>) : <li>-</li>}
-                </ul>
-                <p style={{ margin: '0.2rem 0' }}>
-                  <strong>Study hours:</strong> {dayPlan.studyHours ?? '-'}
-                </p>
-                <p style={{ marginBottom: 0 }}>
-                  <strong>Focus type:</strong> {dayPlan.focusType ?? 'revision'}
-                </p>
-              </article>
+              <Card key={`day-${index}`}>
+                <CardHeader>
+                  <CardTitle className="text-lg">Day {dayPlan.day || index + 1}</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-2">
+                  <div className="flex flex-wrap gap-2">
+                    {topics.length ? topics.map((topic, i) => <Badge key={`topic-${index}-${i}`} variant="secondary">{topic}</Badge>) : <Badge variant="outline">-</Badge>}
+                  </div>
+                  <p className="text-sm"><strong>Study hours:</strong> {dayPlan.studyHours ?? '-'}</p>
+                  <p className="text-sm"><strong>Focus type:</strong> {dayPlan.focusType ?? 'revision'}</p>
+                </CardContent>
+              </Card>
             );
           })}
         </section>
       ) : null}
-    </main>
+    </div>
   );
 }
 

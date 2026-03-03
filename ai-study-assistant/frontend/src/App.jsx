@@ -1,4 +1,5 @@
-﻿import { useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
+import Layout from './components/Layout';
 import Navbar from './components/Navbar';
 import Home from './pages/Home';
 import Upload from './pages/Upload';
@@ -43,29 +44,9 @@ function App() {
   }, [currentPage]);
 
   return (
-    <div
-      style={{
-        minHeight: '100vh',
-        display: 'flex',
-        flexDirection: 'column',
-        background: '#f8fafc',
-        color: '#111827',
-        fontFamily: 'system-ui, sans-serif',
-        fontSize: '16px',
-      }}
-    >
+    <div className="min-h-screen bg-slate-100">
       <Navbar currentPage={currentPage} onNavigate={setCurrentPage} />
-      <main
-        style={{
-          flex: 1,
-          overflowY: 'auto',
-          padding: '1rem',
-          display: 'flex',
-          justifyContent: 'center',
-        }}
-      >
-        <div style={{ width: '100%', maxWidth: '980px' }}>{pageContent}</div>
-      </main>
+      <Layout>{pageContent}</Layout>
     </div>
   );
 }

@@ -1,5 +1,10 @@
-﻿import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import apiClient from '../api/apiClient';
+import { Badge } from '../components/ui/badge';
+import { Button } from '../components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
+import { Input } from '../components/ui/input';
+import { Spinner } from '../components/ui/spinner';
 
 function Quiz({ onBack }) {
   const [topic, setTopic] = useState('');
@@ -35,48 +40,48 @@ function Quiz({ onBack }) {
   };
 
   return (
-    <main style={{ padding: '2rem', fontFamily: 'sans-serif' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-        <h1 style={{ margin: 0 }}>Quiz Generator</h1>
-        <button type="button" onClick={onBack}>
-          Back
-        </button>
-      </div>
-
-      <div style={{ display: 'grid', gap: '0.75rem', maxWidth: '420px', marginBottom: '1rem' }}>
-        <input
-          type="text"
-          placeholder="Enter topic"
-          value={topic}
-          onChange={(e) => setTopic(e.target.value)}
-          style={{ padding: '0.6rem' }}
-        />
-        <button type="button" onClick={generateQuiz} disabled={!topic.trim() || loading}>
-          Generate Quiz
-        </button>
-        {loading ? <p>Generating quiz...</p> : null}
-        {error ? <p>{error}</p> : null}
-      </div>
+    <div className="space-y-4">
+      <Card className="max-w-2xl">
+        <CardHeader className="flex-row items-center justify-between space-y-0">
+          <CardTitle>Quiz Generator</CardTitle>
+          <Button type="button" variant="outline" onClick={onBack}>
+            Back
+          </Button>
+        </CardHeader>
+        <CardContent className="space-y-3">
+          <Input
+            type="text"
+            placeholder="Enter topic"
+            value={topic}
+            onChange={(e) => setTopic(e.target.value)}
+          />
+          <Button type="button" onClick={generateQuiz} disabled={!topic.trim() || loading}>
+            {loading ? <Spinner className="mr-2" /> : null}
+            Generate Quiz
+          </Button>
+          {error ? <p className="text-sm text-red-600">{error}</p> : null}
+        </CardContent>
+      </Card>
 
       {quizData?.quiz?.length ? (
-        <section ref={quizRef} style={{ display: 'grid', gap: '1rem' }}>
+        <section ref={quizRef} className="grid gap-3">
           {quizData.quiz.map((item, index) => (
-            <article key={`quiz-${index}`} style={{ border: '1px solid #ddd', borderRadius: '8px', padding: '0.75rem' }}>
-              <p style={{ marginTop: 0 }}>
-                <strong>{index + 1}. {item.question}</strong>
-              </p>
-              <p style={{ margin: '0.2rem 0' }}>A. {item.options?.A}</p>
-              <p style={{ margin: '0.2rem 0' }}>B. {item.options?.B}</p>
-              <p style={{ margin: '0.2rem 0' }}>C. {item.options?.C}</p>
-              <p style={{ margin: '0.2rem 0' }}>D. {item.options?.D}</p>
-              <p style={{ marginBottom: 0 }}>
-                <strong>Answer: {item.answer}</strong>
-              </p>
-            </article>
+            <Card key={`quiz-${index}`}>
+              <CardHeader>
+                <CardTitle className="text-lg">{index + 1}. {item.question}</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-1">
+                <p>A. {item.options?.A}</p>
+                <p>B. {item.options?.B}</p>
+                <p>C. {item.options?.C}</p>
+                <p>D. {item.options?.D}</p>
+                <Badge className="mt-2">Answer: {item.answer}</Badge>
+              </CardContent>
+            </Card>
           ))}
         </section>
       ) : null}
-    </main>
+    </div>
   );
 }
 

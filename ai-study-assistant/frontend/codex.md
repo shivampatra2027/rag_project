@@ -1,72 +1,139 @@
 ---
 
-## TASK 7 — App Navigation + UI Polish
+## TASK 8 — Production UI Upgrade (shadcn/ui)
 
 Goal:
-Convert pages into a proper app layout with navigation and cleaner UI.
+Upgrade frontend UI to production-quality using shadcn/ui components.
 
 Requirements:
 
-1. Create component:
+------------------------------------------------
 
-src/components/Navbar.jsx
+1. Install TailwindCSS (Vite setup)
 
-Navbar contains buttons:
+Configure Tailwind for React Vite project.
 
-- Home
-- Upload
-- Chat
-- Quiz
-- Revision
-- Prediction
+Add:
+- tailwindcss
+- postcss
+- autoprefixer
 
-2. Navigation System:
+Create:
+tailwind.config.js
+postcss.config.js
 
-Implement simple client-side navigation using React state
-OR React Router (allowed).
+Enable Tailwind in index.css.
 
-Each button opens corresponding page:
+------------------------------------------------
 
-Home → Home.jsx  
-Upload → Upload.jsx  
-Chat → Chat.jsx  
-Quiz → Quiz.jsx  
-Revision → Revision.jsx  
-Prediction → Prediction.jsx
+2. Install shadcn/ui
 
-3. Layout:
+Initialize shadcn:
 
-App.jsx should:
+npx shadcn-ui@latest init
 
-- Render Navbar at top
-- Render active page below navbar
-- Maintain currentPage state
+Configuration:
+- React
+- Tailwind
+- Default theme
+- CSS variables enabled
 
-4. UI Improvements:
+------------------------------------------------
 
-- Center main content
-- Add spacing between sections
-- Add basic button styling
-- Consistent font sizing
-- Scrollable content area
+3. Install Components
 
-(No UI libraries.)
+Add:
 
-5. UX Improvements:
+button
+card
+input
+textarea
+scroll-area
+navbar (navigation menu)
+separator
+badge
+spinner (loader equivalent)
 
-- Highlight active page button
-- Prevent full page reloads
-- Keep layout responsive
+------------------------------------------------
 
-6. Constraints:
+4. Layout Upgrade
 
-- Minimal CSS only
-- Do not redesign existing logic
-- Reuse existing pages
+Create:
+
+src/components/Layout.jsx
+
+Use shadcn Card + container layout.
+
+App layout:
+
+Navbar (top)
+Main container (centered)
+Active page content
+
+------------------------------------------------
+
+5. Navbar Upgrade
+
+Create modern navbar using shadcn components:
+
+- sticky top
+- app title left
+- navigation buttons right
+- highlight active route
+
+------------------------------------------------
+
+6. Update Pages Using shadcn
+
+Replace existing HTML elements with:
+
+Upload.jsx:
+- Card
+- Button
+- Input
+
+Chat.jsx:
+- ScrollArea for messages
+- message bubbles styled with Tailwind
+- fixed input bar
+
+Quiz.jsx:
+- Card per question
+- Badge for answers
+
+Revision.jsx:
+- Card per day plan
+
+Prediction.jsx:
+- Card sections
+- Badge importance score
+
+------------------------------------------------
+
+7. Loading States
+
+Use spinner component while API requests run.
+
+------------------------------------------------
+
+8. Styling Rules
+
+- Clean SaaS dashboard look
+- soft gray background
+- max width container
+- responsive layout
+- spacing using Tailwind utilities
+
+------------------------------------------------
+
+Constraints:
+
+- Do NOT change API logic
+- Only UI refactor
+- Reuse existing state logic
 - Must run immediately
 
 Rules:
 - Modify only required files
-- Do not regenerate project
 - Return only modified files
 - No explanations

@@ -1,12 +1,17 @@
 import { useState } from 'react';
 import apiClient from '../api/apiClient';
+import { Button } from '../components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
+import { Input } from '../components/ui/input';
+import { Spinner } from '../components/ui/spinner';
 
 function Upload({ onBack }) {
   const [file, setFile] = useState(null);
   const [status, setStatus] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const handleUpload = async () => {
-    if (!file) {
+    if (!file || loading) {
       setStatus('Please select a PDF file.');
       return;
     }
@@ -15,6 +20,7 @@ function Upload({ onBack }) {
     formData.append('pdf', file);
 
     try {
+      setLoading(true);
       setStatus('Uploading...');
       await apiClient.post('/api/upload', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
@@ -22,27 +28,35 @@ function Upload({ onBack }) {
       setStatus('Upload successful');
     } catch (error) {
       setStatus(error.response?.data?.message || error.response?.data?.error || 'Upload failed');
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <main style={{ padding: '2rem', fontFamily: 'sans-serif' }}>
-      <h1>Upload Notes</h1>
-      <div style={{ display: 'grid', gap: '0.75rem', maxWidth: '320px' }}>
-        <input
+    <Card className="max-w-xl">
+      <CardHeader>
+        <CardTitle>Upload Notes</CardTitle>
+        <CardDescription>Upload a PDF to index your study notes into the assistant.</CardDescription>
+      </CardHeader>
+      <CardContent className="space-y-4">
+        <Input
           type="file"
           accept="application/pdf,.pdf"
           onChange={(e) => setFile(e.target.files?.[0] || null)}
         />
-        <button type="button" onClick={handleUpload}>
-          Upload
-        </button>
-        <button type="button" onClick={onBack}>
-          Back
-        </button>
-        {status ? <p>{status}</p> : null}
-      </div>
-    </main>
+        <div className="flex flex-wrap gap-2">
+          <Button type="button" onClick={handleUpload} disabled={!file || loading}>
+            {loading ? <Spinner className="mr-2" /> : null}
+            Upload
+          </Button>
+          <Button type="button" variant="outline" onClick={onBack}>
+            Back
+          </Button>
+        </div>
+        {status ? <p className="text-sm text-muted-foreground">{status}</p> : null}
+      </CardContent>
+    </Card>
   );
 }
 

@@ -1,5 +1,10 @@
-﻿import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import apiClient from '../api/apiClient';
+import { Button } from '../components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
+import { ScrollArea } from '../components/ui/scroll-area';
+import { Spinner } from '../components/ui/spinner';
+import { Textarea } from '../components/ui/textarea';
 
 function Chat({ onBack }) {
   const [messages, setMessages] = useState([]);
@@ -45,63 +50,54 @@ function Chat({ onBack }) {
   };
 
   return (
-    <main style={{ padding: '1rem', fontFamily: 'sans-serif', height: '100vh', display: 'flex', flexDirection: 'column' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
-        <h1 style={{ margin: 0 }}>Chat with AI</h1>
-        <button type="button" onClick={onBack}>
+    <Card className="h-[70vh] max-h-[760px]">
+      <CardHeader className="flex-row items-center justify-between space-y-0">
+        <CardTitle>Chat with AI Tutor</CardTitle>
+        <Button type="button" variant="outline" onClick={onBack}>
           Back
-        </button>
-      </div>
-
-      <div
-        style={{
-          flex: 1,
-          overflowY: 'auto',
-          border: '1px solid #ddd',
-          borderRadius: '8px',
-          padding: '0.75rem',
-          background: '#fafafa',
-          marginBottom: '0.75rem',
-        }}
-      >
-        {messages.map((msg, idx) => (
-          <div
-            key={`${msg.role}-${idx}`}
-            style={{
-              display: 'flex',
-              justifyContent: msg.role === 'user' ? 'flex-end' : 'flex-start',
-              marginBottom: '0.5rem',
-            }}
-          >
-            <div
-              style={{
-                maxWidth: '75%',
-                padding: '0.6rem 0.8rem',
-                borderRadius: '8px',
-                background: msg.role === 'user' ? '#dbeafe' : '#e5e7eb',
-                whiteSpace: 'pre-wrap',
-              }}
-            >
-              {msg.content}
-            </div>
+        </Button>
+      </CardHeader>
+      <CardContent className="flex h-[calc(100%-80px)] flex-col gap-3">
+        <ScrollArea className="flex-1 rounded-md border bg-slate-50 p-3">
+          <div className="space-y-2">
+            {messages.map((msg, idx) => (
+              <div
+                key={`${msg.role}-${idx}`}
+                className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
+              >
+                <div
+                  className={`max-w-[80%] whitespace-pre-wrap rounded-lg px-3 py-2 text-sm ${
+                    msg.role === 'user' ? 'bg-primary text-primary-foreground' : 'border bg-white'
+                  }`}
+                >
+                  {msg.content}
+                </div>
+              </div>
+            ))}
+            <div ref={messagesEndRef} />
           </div>
-        ))}
-        <div ref={messagesEndRef} />
-      </div>
+        </ScrollArea>
 
-      <div style={{ display: 'flex', gap: '0.5rem' }}>
-        <input
-          type="text"
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          placeholder="Ask your doubt..."
-          style={{ flex: 1, padding: '0.6rem' }}
-        />
-        <button type="button" onClick={sendMessage} disabled={!input.trim() || loading}>
-          Send
-        </button>
-      </div>
-    </main>
+        <div className="sticky bottom-0 flex gap-2 bg-white pt-2">
+          <Textarea
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            placeholder="Ask your doubt..."
+            className="min-h-10 max-h-28"
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+              }
+            }}
+          />
+          <Button type="button" onClick={sendMessage} disabled={!input.trim() || loading}>
+            {loading ? <Spinner className="mr-2" /> : null}
+            Send
+          </Button>
+        </div>
+      </CardContent>
+    </Card>
   );
 }
 

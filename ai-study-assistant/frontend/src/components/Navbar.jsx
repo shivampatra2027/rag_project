@@ -1,4 +1,13 @@
-﻿function Navbar({ currentPage, onNavigate }) {
+import { GraduationCap } from 'lucide-react';
+import {
+  NavigationMenu,
+  NavigationMenuItem,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+} from './ui/navigation-menu';
+import { cn } from '../lib/utils';
+
+function Navbar({ currentPage, onNavigate }) {
   const items = [
     { key: 'home', label: 'Home' },
     { key: 'upload', label: 'Upload' },
@@ -9,47 +18,34 @@
   ];
 
   return (
-    <header
-      style={{
-        borderBottom: '1px solid #e5e7eb',
-        padding: '0.75rem 1rem',
-        background: '#ffffff',
-        position: 'sticky',
-        top: 0,
-        zIndex: 10,
-      }}
-    >
-      <nav
-        style={{
-          display: 'flex',
-          gap: '0.5rem',
-          flexWrap: 'wrap',
-          maxWidth: '960px',
-          margin: '0 auto',
-        }}
-      >
-        {items.map((item) => {
-          const active = currentPage === item.key;
-          return (
-            <button
-              key={item.key}
-              type="button"
-              onClick={() => onNavigate(item.key)}
-              style={{
-                padding: '0.5rem 0.8rem',
-                borderRadius: '8px',
-                border: active ? '1px solid #1d4ed8' : '1px solid #d1d5db',
-                background: active ? '#dbeafe' : '#ffffff',
-                color: '#111827',
-                cursor: 'pointer',
-                fontSize: '0.95rem',
-              }}
-            >
-              {item.label}
-            </button>
-          );
-        })}
-      </nav>
+    <header className="sticky top-0 z-40 border-b bg-white/90 backdrop-blur">
+      <div className="mx-auto flex w-full max-w-6xl items-center justify-between px-4 py-3 sm:px-6">
+        <div className="flex items-center gap-2 text-sm font-semibold tracking-wide">
+          <GraduationCap className="h-5 w-5" />
+          AI Study Assistant
+        </div>
+
+        <NavigationMenu>
+          <NavigationMenuList>
+            {items.map((item) => {
+              const isActive = currentPage === item.key;
+              return (
+                <NavigationMenuItem key={item.key}>
+                  <NavigationMenuTrigger
+                    type="button"
+                    onClick={() => onNavigate(item.key)}
+                    className={cn(
+                      isActive ? 'bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground' : ''
+                    )}
+                  >
+                    {item.label}
+                  </NavigationMenuTrigger>
+                </NavigationMenuItem>
+              );
+            })}
+          </NavigationMenuList>
+        </NavigationMenu>
+      </div>
     </header>
   );
 }
