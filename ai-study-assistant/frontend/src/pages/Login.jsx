@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { GoogleLogin } from '@react-oauth/google';
-import apiClient from '../api/apiClient';
+import axios, { API_URL } from '../lib/http';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
 import { Spinner } from '../components/ui/spinner';
 import useAuthStore from '../store/authStore';
@@ -21,16 +21,15 @@ function Login() {
       setLoading(true);
       setError('');
 
-      const apiResponse = await apiClient.post('/api/auth/google', { credential });
-      const token = apiResponse.data?.token;
+      const apiResponse = await axios.post(`${API_URL}/api/auth/google`, { credential });
       const user = apiResponse.data?.user;
 
-      if (!token || !user) {
+      if (!user) {
         setError('Invalid auth response from server.');
         return;
       }
 
-      setAuth({ token, user });
+      setAuth({ user });
     } catch (err) {
       setError(err.response?.data?.error || err.response?.data?.message || 'Login failed.');
     } finally {

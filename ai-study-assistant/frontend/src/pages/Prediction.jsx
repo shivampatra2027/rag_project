@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import apiClient from '../api/apiClient';
+import axios, { API_URL, getUserHeaders } from '../lib/http';
 import { Badge } from '../components/ui/badge';
 import { Button } from '../components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
@@ -31,7 +31,11 @@ function Prediction({ onBack }) {
     setPredictionData(null);
 
     try {
-      const response = await apiClient.post('/api/predict', { examName: value });
+      const response = await axios.post(
+        `${API_URL}/api/predict`,
+        { examName: value },
+        { headers: getUserHeaders() }
+      );
       setPredictionData(response.data);
     } catch (err) {
       setError(err.response?.data?.error || err.response?.data?.message || 'Failed to predict exam topics');

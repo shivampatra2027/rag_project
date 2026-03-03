@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import apiClient from '../api/apiClient';
+import axios, { API_URL, getUserHeaders } from '../lib/http';
 import { Badge } from '../components/ui/badge';
 import { Button } from '../components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
@@ -58,10 +58,14 @@ function Revision({ onBack }) {
     setRevisionPlan([]);
 
     try {
-      const response = await apiClient.post('/api/revision', {
-        examDate,
-        hoursPerDay: Number(hoursPerDay),
-      });
+      const response = await axios.post(
+        `${API_URL}/api/revision`,
+        {
+          examDate,
+          hoursPerDay: Number(hoursPerDay),
+        },
+        { headers: getUserHeaders() }
+      );
 
       setRevisionPlan(normalizePlan(response.data));
     } catch (err) {

@@ -4,7 +4,7 @@ const helmet = require('helmet');
 const dotenv = require('dotenv');
 const path = require('path');
 const connectDB = require('./config/db');
-const authMiddleware = require('./middleware/auth');
+const userIdMiddleware = require('./middleware/userId');
 const rateLimiter = require('./middleware/rateLimiter');
 const errorHandler = require('./middleware/errorHandler');
 const authRoutes = require('./routes/auth');
@@ -43,7 +43,7 @@ app.use((req, res, next) => {
 
 app.use(express.json());
 app.use('/api/auth', rateLimiter, authRoutes);
-app.use('/api', authMiddleware, rateLimiter);
+app.use('/api', userIdMiddleware, rateLimiter);
 app.use('/api', uploadRoutes);
 app.use('/api', summarizeRoutes);
 app.use('/api', quizRoutes);

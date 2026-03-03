@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import apiClient from '../api/apiClient';
+import axios, { API_URL, getUserHeaders } from '../lib/http';
 import { Button } from '../components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
 import { Input } from '../components/ui/input';
@@ -22,8 +22,8 @@ function Upload({ onBack }) {
     try {
       setLoading(true);
       setStatus('Uploading...');
-      await apiClient.post('/api/upload', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' },
+      await axios.post(`${API_URL}/api/upload`, formData, {
+        headers: { ...getUserHeaders(), 'Content-Type': 'multipart/form-data' },
       });
       setStatus('Upload successful');
     } catch (error) {

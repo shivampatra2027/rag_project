@@ -6,8 +6,9 @@ import {
   NavigationMenuTrigger,
 } from './ui/navigation-menu';
 import { cn } from '../lib/utils';
+import { Button } from './ui/button';
 
-function Navbar({ currentPage, onNavigate }) {
+function Navbar({ currentPage, onNavigate, onLogout }) {
   const items = [
     { key: 'home', label: 'Home' },
     { key: 'upload', label: 'Upload' },
@@ -25,26 +26,31 @@ function Navbar({ currentPage, onNavigate }) {
           AI Study Assistant
         </div>
 
-        <NavigationMenu>
-          <NavigationMenuList>
-            {items.map((item) => {
-              const isActive = currentPage === item.key;
-              return (
-                <NavigationMenuItem key={item.key}>
-                  <NavigationMenuTrigger
-                    type="button"
-                    onClick={() => onNavigate(item.key)}
-                    className={cn(
-                      isActive ? 'bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground' : ''
-                    )}
-                  >
-                    {item.label}
-                  </NavigationMenuTrigger>
-                </NavigationMenuItem>
-              );
-            })}
-          </NavigationMenuList>
-        </NavigationMenu>
+        <div className="flex items-center gap-3">
+          <NavigationMenu>
+            <NavigationMenuList>
+              {items.map((item) => {
+                const isActive = currentPage === item.key;
+                return (
+                  <NavigationMenuItem key={item.key}>
+                    <NavigationMenuTrigger
+                      type="button"
+                      onClick={() => onNavigate(item.key)}
+                      className={cn(
+                        isActive ? 'bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground' : ''
+                      )}
+                    >
+                      {item.label}
+                    </NavigationMenuTrigger>
+                  </NavigationMenuItem>
+                );
+              })}
+            </NavigationMenuList>
+          </NavigationMenu>
+          <Button type="button" variant="outline" size="sm" onClick={onLogout}>
+            Logout
+          </Button>
+        </div>
       </div>
     </header>
   );

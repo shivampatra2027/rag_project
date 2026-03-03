@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import apiClient from '../api/apiClient';
+import axios, { API_URL, getUserHeaders } from '../lib/http';
 import { Button } from '../components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { ScrollArea } from '../components/ui/scroll-area';
@@ -33,7 +33,7 @@ function Chat({ onBack }) {
     setLoading(true);
 
     try {
-      const response = await apiClient.post('/api/doubt', { question });
+      const response = await axios.post(`${API_URL}/api/doubt`, { question }, { headers: getUserHeaders() });
       const reply = response.data?.explanation || 'No response received.';
 
       setMessages((prev) =>

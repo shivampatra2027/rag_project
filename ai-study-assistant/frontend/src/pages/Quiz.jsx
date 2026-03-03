@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import apiClient from '../api/apiClient';
+import axios, { API_URL, getUserHeaders } from '../lib/http';
 import { Badge } from '../components/ui/badge';
 import { Button } from '../components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
@@ -30,7 +30,7 @@ function Quiz({ onBack }) {
     setQuizData(null);
 
     try {
-      const response = await apiClient.post('/api/quiz', { topic: value });
+      const response = await axios.post(`${API_URL}/api/quiz`, { topic: value }, { headers: getUserHeaders() });
       setQuizData(response.data);
     } catch (err) {
       setError(err.response?.data?.error || err.response?.data?.message || 'Failed to generate quiz');

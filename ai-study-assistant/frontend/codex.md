@@ -1,80 +1,38 @@
----
+TASK: Automatically attach JWT token to API requests.
 
-## TASK AUTH — Google Login Frontend
+PROBLEM:
+POST /api/upload returns 401 Unauthorized because Authorization header is missing.
 
-Goal:
-Allow users to sign in using Google account.
+GOAL:
+Send JWT token with every backend request.
 
-------------------------------------------------
+IMPLEMENT:
 
-1. Install
+1. Create file:
+src/lib/apiClient.js
 
-npm install @react-oauth/google
+2. Configure axios instance:
 
-------------------------------------------------
-
-2. Wrap App
-
-In main.jsx:
-
-<GoogleOAuthProvider clientId="YOUR_CLIENT_ID">
-   <App />
-</GoogleOAuthProvider>
-
-------------------------------------------------
-
-3. Create Page
-
-src/pages/Login.jsx
-
-Add GoogleLogin button.
-
-------------------------------------------------
-
-4. On Success
-
-Receive credential response.
-
-Send to backend:
-
-POST /api/auth/google
-
-Body:
-{
-  credential: response.credential
-}
-
-------------------------------------------------
-
-5. Store Auth
-
-Save:
-- token
-- user
-
-inside authStore (zustand).
-
-------------------------------------------------
-
-6. Axios Update
-
-Attach header automatically:
+- baseURL = import.meta.env.VITE_API_URL
+- Add request interceptor
+- Read token from localStorage
+- Attach header:
 
 Authorization: Bearer <token>
 
-------------------------------------------------
+Example logic:
+const token = localStorage.getItem("token");
+if(token){
+  config.headers.Authorization = `Bearer ${token}`;
+}
 
-7. Redirect
+3. Replace all API calls with apiClient.
 
-After login → Home page.
+4. After Google login success:
+store token:
 
-------------------------------------------------
+localStorage.setItem("token", response.token);
 
-8. Protected App
-
-If no token → show Login page.
-
-Rules:
-- Do not change existing pages
-- Only add auth layer
-- Return modified files only
+EXPECTED RESULT:
+- /api/upload returns 200 OK
+- No Unauthorized errors

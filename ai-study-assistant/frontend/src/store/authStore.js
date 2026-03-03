@@ -2,38 +2,41 @@ import { create } from 'zustand';
 
 function loadInitialAuth() {
   try {
-    const raw = localStorage.getItem('auth');
-    if (!raw) {
-      return { token: null, user: null };
-    }
-
-    const parsed = JSON.parse(raw);
+    const rawUser = localStorage.getItem('user');
+    const parsedUser = rawUser ? JSON.parse(rawUser) : null;
     return {
-      token: parsed?.token || null,
-      user: parsed?.user || null,
+      user: parsedUser || null,
     };
   } catch (error) {
-    return { token: null, user: null };
+    return { user: null };
   }
 }
 
 const initialAuth = loadInitialAuth();
 
 const useAuthStore = create((set) => ({
-  token: initialAuth.token,
   user: initialAuth.user,
-  setAuth: ({ token, user }) => {
+  setAuth: ({ user }) => {
     const nextAuth = {
-      token: token || null,
       user: user || null,
     };
 
-    localStorage.setItem('auth', JSON.stringify(nextAuth));
+    if (nextAuth.user) {
+      localStorage.setItem('user', JSON.stringify(nextAuth.user));
+    } else {
+      localStorage.removeItem('user');
+    }
+
     set(nextAuth);
   },
   clearAuth: () => {
-    localStorage.removeItem('auth');
-    set({ token: null, user: null });
+    localStorage.removeItem('user');
+    set({ user: null });
+  },
+  logout: () => {
+    localStorage.removeItem('user');
+    set({ user: null });
+    window.location.href = '/login';
   },
 }));
 

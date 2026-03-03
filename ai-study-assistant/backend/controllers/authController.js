@@ -1,28 +1,12 @@
-const jwt = require('jsonwebtoken');
 const { OAuth2Client } = require('google-auth-library');
 const User = require('../models/User');
-
-function getJwtSecret() {
-  return (process.env.JWT_SECRET || '').trim();
-}
 
 function getGoogleClientId() {
   return (process.env.GOOGLE_CLIENT_ID || '').trim();
 }
 
-function createToken(userId) {
-  const secret = getJwtSecret();
-
-  if (!secret) {
-    throw new Error('JWT_SECRET is missing in environment variables.');
-  }
-
-  return jwt.sign({ userId }, secret, { expiresIn: '7d' });
-}
-
-function buildAuthResponse(user, token) {
+function buildAuthResponse(user) {
   return {
-    token,
     user: {
       id: user._id.toString(),
       name: user.name,
@@ -68,8 +52,7 @@ async function googleAuth(req, res) {
     await user.save();
   }
 
-  const token = createToken(user._id.toString());
-  return res.status(200).json(buildAuthResponse(user, token));
+  return res.status(200).json(buildAuthResponse(user));
 }
 
 module.exports = {
