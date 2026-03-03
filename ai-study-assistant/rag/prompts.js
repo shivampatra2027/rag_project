@@ -74,8 +74,51 @@ Rules:
 `;
 }
 
+function examPredictionPrompt(context, examName) {
+  return `You are an expert exam analyst.
+
+Using ONLY the provided study material:
+
+Analyze and identify:
+- Most important topics
+- Frequently emphasized concepts
+- High probability exam questions
+- Key definitions students must memorize
+
+Exam Name:
+${examName}
+
+Study Material Context:
+${context}
+
+Output STRICT JSON:
+{
+  "exam": "",
+  "predictedTopics": [
+    {
+      "topic": "",
+      "importanceScore": 1-10,
+      "reason": ""
+    }
+  ],
+  "likelyQuestions": [
+    "question 1",
+    "question 2"
+  ],
+  "revisionPriority": ["topic1", "topic2"]
+}
+
+Rules:
+- Answer ONLY using provided study material context.
+- If answer is not found, say: 'Not found in uploaded notes.'
+- If information is insufficient:
+return "Not enough study material uploaded."
+`;
+}
+
 module.exports = {
   summaryPrompt,
   quizPrompt,
   doubtPrompt,
+  examPredictionPrompt,
 };

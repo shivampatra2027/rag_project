@@ -1,28 +1,48 @@
 ﻿const express = require('express');
 const axios = require('axios');
-const { summaryPrompt } = require('../rag/prompts');
 const { retrieveContext } = require('../rag/retriever');
+const { examPredictionPrompt } = require('../rag/prompts');
+const asyncHandler = require('../utils/asyncHandler');
+const { validate, predictSchema } = require('../middleware/validate');
 
 const router = express.Router();
 
-router.post('/summarize', async (req, res) => {
+function parseJsonContent(content) {
+  if (!content || typeof content !== 'string') {
+    return null;
+  }
+
+  const trimmed = content.trim();
+
   try {
-    const userId = req.userId;
-    const { topic } = req.body || {};
-
-    if (!topic || typeof topic !== 'string' || !topic.trim()) {
-      return res.status(400).json({ message: 'Invalid input. Provide non-empty "topic" in request body.' });
+    return JSON.parse(trimmed);
+  } catch (error) {
+    const fenced = trimmed.replace(/^```json\s*/i, '').replace(/^```\s*/i, '').replace(/```$/, '').trim();
+    try {
+      return JSON.parse(fenced);
+    } catch (parseError) {
+      return null;
     }
+  }
+}
 
-    console.log(`[RAG] retrieving context for: ${topic}`);
-    const chunks = await retrieveContext(userId, topic);
-    console.log(`[RAG] chunks found: ${chunks.length}`);
+router.post(
+  '/predict',
+  validate(predictSchema),
+  asyncHandler(async (req, res) => {
+    const userId = req.userId;
+    const { examName } = req.body;
+
+    console.log('[PREDICTION] analyzing material');
+    const retrievalQuery = 'important topics repeated concepts key subjects';
+    const chunks = await retrieveContext(userId, retrievalQuery);
 
     if (!chunks.length) {
       return res.status(404).json({ error: 'No study material uploaded for this user' });
     }
 
     const context = chunks.join('\n\n');
+    const prompt = examPredictionPrompt(context, examName.trim());
 
     const apiKey = (process.env.GEMINI_API_KEY || '').trim();
     if (!apiKey) {
@@ -31,7 +51,6 @@ router.post('/summarize', async (req, res) => {
 
     const model = (process.env.GEMINI_MODEL || 'gemini-2.5-flash').trim();
     const modelPath = model.startsWith('models/') ? model : `models/${model}`;
-    const prompt = summaryPrompt(context);
 
     const response = await axios.post(
       `https://generativelanguage.googleapis.com/v1beta/${modelPath}:generateContent`,
@@ -63,31 +82,21 @@ router.post('/summarize', async (req, res) => {
       return res.status(502).json({ message: 'No response text received from AI service.' });
     }
 
-    return res.status(200).send(aiText);
-  } catch (error) {
-    const upstreamStatus = error.response?.status;
-    const upstreamMessage =
-      error.response?.data?.error?.message ||
-      error.response?.data?.message ||
-      error.message ||
-      'Unknown error';
-
-    if (upstreamMessage.toLowerCase().includes('no study material uploaded yet')) {
-      return res.status(404).json({ error: 'No study material uploaded for this user' });
+    if (aiText === 'Not enough study material uploaded.') {
+      return res.status(422).json({ error: aiText });
     }
 
-    if (upstreamStatus) {
-      return res.status(upstreamStatus).json({
-        message: 'Gemini API request failed',
-        error: upstreamMessage,
+    const parsed = parseJsonContent(aiText);
+    if (!parsed || typeof parsed !== 'object') {
+      return res.status(502).json({
+        message: 'Prediction response was not valid JSON.',
+        raw: aiText,
       });
     }
 
-    return res.status(500).json({
-      message: 'Internal server error while generating summary',
-      error: upstreamMessage,
-    });
-  }
-});
+    console.log('[PREDICTION] topics generated');
+    return res.status(200).json(parsed);
+  })
+);
 
 module.exports = router;

@@ -3,8 +3,8 @@ const path = require('path');
 const axios = require('axios');
 const { ChromaClient } = require('chromadb');
 const { RecursiveCharacterTextSplitter } = require('@langchain/textsplitters');
+const { collectionNameForUser } = require('./userCollection');
 
-const COLLECTION_NAME = 'study_notes';
 const CHROMA_URL = process.env.CHROMA_URL || 'http://127.0.0.1:8000';
 const LOCAL_CHROMA_DIR = path.join(__dirname, '..', 'chroma_db');
 
@@ -83,20 +83,15 @@ function getChromaClient() {
   });
 }
 
-async function getCollection(client, embeddingFunction) {
-  return client.getOrCreateCollection({
-    name: COLLECTION_NAME,
-    metadata: { source: 'ai-study-assistant' },
-    embeddingFunction,
-  });
-}
-
-async function storeDocument(text) {
+async function storeDocument(userId, text) {
   if (!text || typeof text !== 'string' || !text.trim()) {
     throw new Error('Document text is empty.');
   }
 
   try {
+    const collectionName = collectionNameForUser(userId);
+    console.log(`[RAG] collection: ${collectionName}`);
+
     const splitter = new RecursiveCharacterTextSplitter({
       chunkSize: 1000,
       chunkOverlap: 200,
@@ -112,11 +107,16 @@ async function storeDocument(text) {
     const vectors = await embedTexts(chunks);
 
     const client = getChromaClient();
-    const collection = await getCollection(client, createChromaEmbeddingFunction());
+    const collection = await client.getOrCreateCollection({
+      name: collectionName,
+      metadata: { source: 'ai-study-assistant', userId },
+      embeddingFunction: createChromaEmbeddingFunction(),
+    });
 
     const now = Date.now();
-    const ids = chunks.map((_, idx) => `doc-${now}-${idx}`);
+    const ids = chunks.map((_, idx) => `${collectionName}-${now}-${idx}`);
     const metadatas = chunks.map((_, idx) => ({
+      userId,
       chunkIndex: idx,
       createdAt: new Date(now).toISOString(),
     }));
@@ -129,7 +129,7 @@ async function storeDocument(text) {
     });
 
     return {
-      collection: COLLECTION_NAME,
+      collection: collectionName,
       chunksStored: chunks.length,
     };
   } catch (error) {

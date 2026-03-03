@@ -1,7 +1,7 @@
 ﻿const axios = require('axios');
 const { ChromaClient } = require('chromadb');
+const { collectionNameForUser } = require('./userCollection');
 
-const COLLECTION_NAME = 'study_notes';
 const CHROMA_URL = process.env.CHROMA_URL || 'http://127.0.0.1:8000';
 
 function getGeminiConfig() {
@@ -75,18 +75,21 @@ function getChromaClient() {
   });
 }
 
-async function retrieveContext(query) {
+async function retrieveContext(userId, query) {
   if (!query || typeof query !== 'string' || !query.trim()) {
     throw new Error('Query is empty.');
   }
 
   try {
+    const collectionName = collectionNameForUser(userId);
+    console.log(`[RAG] collection: ${collectionName}`);
+
     const queryVectors = await embedTexts([query]);
     const queryEmbedding = queryVectors[0];
 
     const client = getChromaClient();
     const collection = await client.getCollection({
-      name: COLLECTION_NAME,
+      name: collectionName,
       embeddingFunction: createChromaEmbeddingFunction(),
     });
 
@@ -99,7 +102,18 @@ async function retrieveContext(query) {
     const chunks = result?.documents?.[0] || [];
     return chunks.filter(Boolean).slice(0, 4);
   } catch (error) {
-    if (error?.message?.toLowerCase().includes('fetch failed') || error?.message?.includes('ECONNREFUSED')) {
+    const message = (error?.message || '').toLowerCase();
+
+    if (
+      message.includes('does not exist') ||
+      message.includes('not found') ||
+      message.includes('could not be found') ||
+      message.includes('requested resource')
+    ) {
+      throw new Error('No study material uploaded yet');
+    }
+
+    if (message.includes('fetch failed') || message.includes('econnrefused')) {
       throw new Error(`Unable to reach ChromaDB at ${CHROMA_URL}. Ensure local ChromaDB is running.`);
     }
 

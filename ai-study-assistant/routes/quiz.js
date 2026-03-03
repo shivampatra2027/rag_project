@@ -26,6 +26,7 @@ function parseQuizJson(content) {
 
 router.post('/quiz', async (req, res) => {
   try {
+    const userId = req.userId;
     const { topic } = req.body || {};
 
     if (!topic || typeof topic !== 'string' || !topic.trim()) {
@@ -33,11 +34,11 @@ router.post('/quiz', async (req, res) => {
     }
 
     console.log(`[RAG] retrieving context for: ${topic}`);
-    const chunks = await retrieveContext(topic);
+    const chunks = await retrieveContext(userId, topic);
     console.log(`[RAG] chunks found: ${chunks.length}`);
 
     if (!chunks.length) {
-      return res.status(404).json({ error: 'No study material uploaded yet' });
+      return res.status(404).json({ error: 'No study material uploaded for this user' });
     }
 
     const context = chunks.join('\n\n');
@@ -118,8 +119,8 @@ router.post('/quiz', async (req, res) => {
       error.message ||
       'Unknown error';
 
-    if (upstreamMessage.toLowerCase().includes('does not exist') || upstreamMessage.toLowerCase().includes('not found')) {
-      return res.status(404).json({ error: 'No study material uploaded yet' });
+    if (upstreamMessage.toLowerCase().includes('no study material uploaded yet')) {
+      return res.status(404).json({ error: 'No study material uploaded for this user' });
     }
 
     if (upstreamStatus) {

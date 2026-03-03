@@ -39,6 +39,8 @@ const upload = multer({
 });
 
 router.post('/upload', (req, res) => {
+  const userId = req.userId;
+
   upload.single('pdf')(req, res, async (err) => {
     if (err instanceof multer.MulterError) {
       return res.status(400).json({ message: err.message });
@@ -71,7 +73,7 @@ router.post('/upload', (req, res) => {
         throw new Error('Unsupported pdf-parse API');
       }
 
-      await storeDocument(text);
+      await storeDocument(userId, text);
 
       return res.status(200).json({
         message: 'PDF uploaded and indexed successfully',

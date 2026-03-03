@@ -2,26 +2,35 @@
 const axios = require('axios');
 const { doubtPrompt } = require('../rag/prompts');
 const { retrieveContext } = require('../rag/retriever');
+const { addMessage, getHistory } = require('../memory/chatMemory');
+const asyncHandler = require('../utils/asyncHandler');
+const { validate, doubtSchema } = require('../middleware/validate');
 
 const router = express.Router();
 
-router.post('/doubt', async (req, res) => {
-  try {
-    const { question } = req.body || {};
-
-    if (!question || typeof question !== 'string' || !question.trim()) {
-      return res.status(400).json({ message: 'Invalid input. Provide non-empty "question".' });
-    }
+router.post(
+  '/doubt',
+  validate(doubtSchema),
+  asyncHandler(async (req, res) => {
+    const userId = req.userId;
+    const { question } = req.body;
 
     console.log(`[RAG] retrieving context for: ${question}`);
-    const chunks = await retrieveContext(question);
+    const chunks = await retrieveContext(userId, question);
     console.log(`[RAG] chunks found: ${chunks.length}`);
 
     if (!chunks.length) {
-      return res.status(404).json({ error: 'No study material uploaded yet' });
+      return res.status(404).json({ error: 'No study material uploaded for this user' });
     }
 
     const context = chunks.join('\n\n');
+    const chatHistory = getHistory(userId);
+
+    const messages = [
+      { role: 'system', content: 'You are a helpful study tutor.' },
+      ...chatHistory,
+      { role: 'user', content: doubtPrompt(context, question) },
+    ];
 
     const apiKey = (process.env.GEMINI_API_KEY || '').trim();
     if (!apiKey) {
@@ -30,17 +39,20 @@ router.post('/doubt', async (req, res) => {
 
     const model = (process.env.GEMINI_MODEL || 'gemini-2.5-flash').trim();
     const modelPath = model.startsWith('models/') ? model : `models/${model}`;
-    const prompt = `${doubtPrompt(context, question)}\n\nResponse style: Keep the answer concise, student-friendly, and easy to revise.`;
+
+    const systemMessage = messages.find((m) => m.role === 'system');
+    const contentMessages = messages
+      .filter((m) => m.role !== 'system')
+      .map((m) => ({
+        role: m.role === 'assistant' ? 'model' : 'user',
+        parts: [{ text: m.content }],
+      }));
 
     const response = await axios.post(
       `https://generativelanguage.googleapis.com/v1beta/${modelPath}:generateContent`,
       {
-        contents: [
-          {
-            role: 'user',
-            parts: [{ text: prompt }],
-          },
-        ],
+        systemInstruction: systemMessage ? { parts: [{ text: systemMessage.content }] } : undefined,
+        contents: contentMessages,
       },
       {
         headers: {
@@ -62,31 +74,11 @@ router.post('/doubt', async (req, res) => {
       return res.status(502).json({ message: 'No response text received from AI service.' });
     }
 
+    addMessage(userId, 'user', question);
+    addMessage(userId, 'assistant', explanation);
+
     return res.status(200).json({ explanation });
-  } catch (error) {
-    const upstreamStatus = error.response?.status;
-    const upstreamMessage =
-      error.response?.data?.error?.message ||
-      error.response?.data?.message ||
-      error.message ||
-      'Unknown error';
-
-    if (upstreamMessage.toLowerCase().includes('does not exist') || upstreamMessage.toLowerCase().includes('not found')) {
-      return res.status(404).json({ error: 'No study material uploaded yet' });
-    }
-
-    if (upstreamStatus) {
-      return res.status(upstreamStatus).json({
-        message: 'Gemini API request failed',
-        error: upstreamMessage,
-      });
-    }
-
-    return res.status(500).json({
-      message: 'Internal server error while resolving doubt',
-      error: upstreamMessage,
-    });
-  }
-});
+  })
+);
 
 module.exports = router;
