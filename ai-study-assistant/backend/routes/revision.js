@@ -7,6 +7,13 @@ const { validate, revisionSchema } = require('../middleware/validate');
 
 const router = express.Router();
 
+router.use('/revision', (req, res, next) => {
+  if (req.method === 'GET') {
+    req.method = 'POST';
+  }
+  next();
+});
+
 router.post(
   '/revision',
   validate(revisionSchema),

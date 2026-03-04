@@ -3,6 +3,13 @@ const { clearHistory, getHistory } = require('../memory/chatMemory');
 
 const router = express.Router();
 
+router.use('/clear-chat', (req, res, next) => {
+  if (req.method === 'GET') {
+    req.method = 'POST';
+  }
+  next();
+});
+
 router.get('/chat-history', (req, res) => {
   try {
     const userId = req.userId;

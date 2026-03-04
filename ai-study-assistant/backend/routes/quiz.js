@@ -5,6 +5,13 @@ const { retrieveContext } = require('../rag/retriever');
 
 const router = express.Router();
 
+router.use('/quiz', (req, res, next) => {
+  if (req.method === 'GET') {
+    req.method = 'POST';
+  }
+  next();
+});
+
 function parseQuizJson(content) {
   if (!content || typeof content !== 'string') {
     return null;

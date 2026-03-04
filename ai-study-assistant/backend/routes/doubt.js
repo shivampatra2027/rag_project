@@ -8,6 +8,14 @@ const { validate, doubtSchema } = require('../middleware/validate');
 
 const router = express.Router();
 
+router.use('/doubt', (req, res, next) => {
+  if (req.method === 'GET') {
+    req.method = 'POST';
+    req.body = req.body && typeof req.body === 'object' ? req.body : {};
+  }
+  next();
+});
+
 router.post(
   '/doubt',
   validate(doubtSchema),

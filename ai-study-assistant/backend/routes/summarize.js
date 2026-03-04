@@ -5,6 +5,13 @@ const { retrieveContext } = require('../rag/retriever');
 
 const router = express.Router();
 
+router.use('/summarize', (req, res, next) => {
+  if (req.method === 'GET') {
+    req.method = 'POST';
+  }
+  next();
+});
+
 router.post('/summarize', async (req, res) => {
   try {
     const userId = req.userId;

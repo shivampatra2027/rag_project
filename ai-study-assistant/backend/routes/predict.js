@@ -7,6 +7,13 @@ const { validate, predictSchema } = require('../middleware/validate');
 
 const router = express.Router();
 
+router.use('/predict', (req, res, next) => {
+  if (req.method === 'GET') {
+    req.method = 'POST';
+  }
+  next();
+});
+
 function parseJsonContent(content) {
   if (!content || typeof content !== 'string') {
     return null;
