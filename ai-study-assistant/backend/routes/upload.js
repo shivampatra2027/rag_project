@@ -38,6 +38,13 @@ const upload = multer({
   },
 });
 
+router.use('/upload', (req, res, next) => {
+  if (req.method === 'GET') {
+    req.method = 'POST';
+  }
+  next();
+});
+
 router.post('/upload', (req, res) => {
   const userId = req.userId;
 
