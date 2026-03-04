@@ -37,6 +37,7 @@ const upload = multer({
     fileSize: 20 * 1024 * 1024,
   },
 });
+const acceptedFieldNames = new Set(['pdf', 'file', 'document']);
 
 router.use('/upload', (req, res, next) => {
   if (req.method === 'GET') {
@@ -48,7 +49,7 @@ router.use('/upload', (req, res, next) => {
 router.post('/upload', (req, res) => {
   const userId = req.userId;
 
-  upload.single('pdf')(req, res, async (err) => {
+  upload.any()(req, res, async (err) => {
     if (err instanceof multer.MulterError) {
       return res.status(400).json({ message: err.message });
     }
@@ -57,12 +58,19 @@ router.post('/upload', (req, res) => {
       return res.status(400).json({ message: err.message || 'Upload failed' });
     }
 
-    if (!req.file) {
-      return res.status(400).json({ message: 'No file uploaded. Use field name "pdf".' });
+    const uploadedFiles = Array.isArray(req.files) ? req.files : [];
+    const targetFile =
+      uploadedFiles.find((file) => acceptedFieldNames.has((file.fieldname || '').toLowerCase())) ||
+      uploadedFiles[0];
+
+    if (!targetFile) {
+      return res.status(400).json({
+        message: 'No file uploaded. Use multipart/form-data with field name "pdf", "file", or "document".',
+      });
     }
 
     try {
-      const fileBuffer = await fs.promises.readFile(req.file.path);
+      const fileBuffer = await fs.promises.readFile(targetFile.path);
       let text = '';
 
       if (typeof pdfParseLib === 'function') {
