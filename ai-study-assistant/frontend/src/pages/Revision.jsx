@@ -144,19 +144,19 @@ function Revision({ onBack }) {
             {loading ? <Spinner className="mr-2" /> : null}
             Generate Plan
           </Button>
-          {error ? <p className="text-sm text-red-600">{error}</p> : null}
+          {error ? <p className="text-sm text-red-600 dark:text-red-400">{error}</p> : null}
         </CardContent>
       </Card>
 
       {dayCards.length > 0 ? (
         <section ref={resultRef} className="grid gap-4">
           {dayCards.map((section, index) => (
-            <Card key={`day-section-${index}`} className="rounded-xl border border-cyan-100/80 bg-white shadow-md">
+            <Card key={`day-section-${index}`} className="rounded-xl border border-cyan-200/70 bg-card shadow-md dark:border-cyan-900/70">
               <CardHeader>
                 <CardTitle className="text-xl">{section.title}</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="prose prose-slate prose-sm max-w-none sm:prose-base">
+                <div className="prose prose-sm max-w-none prose-headings:text-foreground prose-p:text-foreground prose-li:text-foreground dark:prose-invert sm:prose-base">
                   <ReactMarkdown>{section.content}</ReactMarkdown>
                 </div>
               </CardContent>
@@ -167,12 +167,12 @@ function Revision({ onBack }) {
 
       {revisionMarkdown && dayCards.length === 0 ? (
         <section ref={resultRef}>
-          <Card className="rounded-xl border border-cyan-100/80 bg-white shadow-md">
+          <Card className="rounded-xl border border-cyan-200/70 bg-card shadow-md dark:border-cyan-900/70">
             <CardHeader>
               <CardTitle className="text-xl">Revision Notes</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="prose prose-slate prose-sm max-w-none sm:prose-base">
+              <div className="prose prose-sm max-w-none prose-headings:text-foreground prose-p:text-foreground prose-li:text-foreground dark:prose-invert sm:prose-base">
                 <ReactMarkdown>{revisionMarkdown}</ReactMarkdown>
               </div>
             </CardContent>

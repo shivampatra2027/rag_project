@@ -38,7 +38,7 @@ function Home({ onOpenUpload, onOpenChat, onOpenQuiz, onOpenRevision, onOpenPred
 
   return (
     <div className="space-y-6">
-      <Card className="animate-rise overflow-hidden border-cyan-100/70 bg-gradient-to-br from-cyan-50 via-white to-amber-50">
+      <Card className="animate-rise overflow-hidden border-cyan-200/70 bg-gradient-to-br from-cyan-50 via-white to-amber-50 dark:border-cyan-800/70 dark:from-cyan-950/40 dark:via-slate-900 dark:to-amber-950/30">
         <CardHeader className="space-y-3">
           <CardTitle className="text-3xl sm:text-4xl">Study Fast. Recall Better.</CardTitle>
           <CardDescription>
@@ -57,12 +57,16 @@ function Home({ onOpenUpload, onOpenChat, onOpenQuiz, onOpenRevision, onOpenPred
         {tools.map((tool, index) => {
           const Icon = tool.icon;
           return (
-            <Card key={tool.title} className="animate-rise border-cyan-100/70" style={{ animationDelay: `${index * 50}ms` }}>
+            <Card
+              key={tool.title}
+              className="animate-rise border-cyan-200/70 dark:border-cyan-900/70"
+              style={{ animationDelay: `${index * 50}ms` }}
+            >
               <CardContent className="space-y-4 p-4">
                 <div className="flex items-start justify-between gap-3">
                   <div>
                     <p className="flex items-center gap-2 font-semibold">
-                      <Icon className="h-4 w-4 text-cyan-700" /> {tool.title}
+                      <Icon className="h-4 w-4 text-primary" /> {tool.title}
                     </p>
                     <p className="mt-1 text-sm text-muted-foreground">{tool.hint}</p>
                   </div>
@@ -72,10 +76,13 @@ function Home({ onOpenUpload, onOpenChat, onOpenQuiz, onOpenRevision, onOpenPred
             </Card>
           );
         })}
-        <Card className="animate-rise border-amber-200/80 bg-amber-50/70 sm:col-span-2 lg:col-span-1" style={{ animationDelay: '250ms' }}>
+        <Card
+          className="animate-rise border-amber-200/80 bg-amber-50/70 dark:border-amber-800/70 dark:bg-amber-950/30 sm:col-span-2 lg:col-span-1"
+          style={{ animationDelay: '250ms' }}
+        >
           <CardContent className="space-y-3 p-4">
-            <p className="font-semibold text-amber-900">Tip</p>
-            <p className="text-sm text-amber-900/80">
+            <p className="font-semibold text-amber-900 dark:text-amber-200">Tip</p>
+            <p className="text-sm text-amber-900/80 dark:text-amber-100/85">
               Upload at least one strong subject PDF first. Every other tool performs better once your notes are indexed.
             </p>
           </CardContent>

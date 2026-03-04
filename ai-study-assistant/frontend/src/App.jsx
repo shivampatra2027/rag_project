@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Navigate, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import Layout from './components/Layout';
 import Navbar from './components/Navbar';
@@ -27,10 +27,32 @@ const pageByRoute = {
   '/prediction': 'prediction',
 };
 
+const THEME_KEY = 'ai-study-assistant-theme';
+
+function getPreferredTheme() {
+  if (typeof window === 'undefined') {
+    return 'light';
+  }
+
+  const stored = window.localStorage.getItem(THEME_KEY);
+  if (stored === 'light' || stored === 'dark') {
+    return stored;
+  }
+
+  return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+}
+
 function App() {
   const location = useLocation();
   const navigate = useNavigate();
+  const [theme, setTheme] = useState(getPreferredTheme);
   const currentPage = pageByRoute[location.pathname] || 'home';
+
+  useEffect(() => {
+    const root = document.documentElement;
+    root.classList.toggle('dark', theme === 'dark');
+    window.localStorage.setItem(THEME_KEY, theme);
+  }, [theme]);
 
   const appRoutes = useMemo(() => {
     const backToHome = () => navigate('/');
@@ -63,9 +85,13 @@ function App() {
     navigate(routeByPage[page] || '/');
   };
 
+  const handleToggleTheme = () => {
+    setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'));
+  };
+
   return (
     <div className="app-shell-bg min-h-screen">
-      <Navbar currentPage={currentPage} onNavigate={handleNavigate} />
+      <Navbar currentPage={currentPage} onNavigate={handleNavigate} theme={theme} onToggleTheme={handleToggleTheme} />
       <Layout>{appRoutes}</Layout>
     </div>
   );

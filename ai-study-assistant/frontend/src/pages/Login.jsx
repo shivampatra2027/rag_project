@@ -38,7 +38,7 @@ function Login() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-slate-100 px-4">
+    <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <Card className="w-full max-w-md">
         <CardHeader>
           <CardTitle>Login</CardTitle>
@@ -56,7 +56,7 @@ function Login() {
               <Spinner /> Signing you in...
             </p>
           ) : null}
-          {error ? <p className="text-center text-sm text-red-600">{error}</p> : null}
+          {error ? <p className="text-center text-sm text-red-600 dark:text-red-400">{error}</p> : null}
         </CardContent>
       </Card>
     </div>
