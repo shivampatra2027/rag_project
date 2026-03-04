@@ -7,7 +7,6 @@ const connectDB = require('./config/db');
 const userIdMiddleware = require('./middleware/userId');
 const rateLimiter = require('./middleware/rateLimiter');
 const errorHandler = require('./middleware/errorHandler');
-const authRoutes = require('./routes/auth');
 const uploadRoutes = require('./routes/upload');
 const summarizeRoutes = require('./routes/summarize');
 const quizRoutes = require('./routes/quiz');
@@ -42,7 +41,6 @@ app.use((req, res, next) => {
 });
 
 app.use(express.json());
-app.use('/api/auth', rateLimiter, authRoutes);
 app.use('/api', userIdMiddleware, rateLimiter);
 app.use('/api', uploadRoutes);
 app.use('/api', summarizeRoutes);

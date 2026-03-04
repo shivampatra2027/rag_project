@@ -1,21 +1,39 @@
 import axios from 'axios';
 
 export const API_URL = import.meta.env.VITE_API_URL;
+const ANON_USER_KEY = 'anon_user_id';
 
-export function getUserHeaders() {
-  try {
-    const raw = localStorage.getItem('user');
-    const user = raw ? JSON.parse(raw) : null;
-    const userId = user?.id;
-
-    if (userId && typeof userId === 'string') {
-      return { 'x-user-id': userId };
-    }
-  } catch (error) {
-    return {};
+function createAnonymousUserId() {
+  if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
+    return crypto.randomUUID();
   }
 
-  return {};
+  return `anon_${Date.now()}_${Math.floor(Math.random() * 1000000)}`;
+}
+
+function getOrCreateAnonymousUserId() {
+  try {
+    const existing = localStorage.getItem(ANON_USER_KEY);
+    if (existing && typeof existing === 'string' && existing.trim()) {
+      return existing.trim();
+    }
+  } catch (error) {
+    return createAnonymousUserId();
+  }
+
+  const generated = createAnonymousUserId();
+
+  try {
+    localStorage.setItem(ANON_USER_KEY, generated);
+  } catch (error) {
+    // Ignore storage failures and still return a generated id.
+  }
+
+  return generated;
+}
+
+export function getUserHeaders() {
+  return { 'x-user-id': getOrCreateAnonymousUserId() };
 }
 
 export default axios;

@@ -47,9 +47,11 @@ function Navbar({ currentPage, onNavigate, onLogout }) {
               })}
             </NavigationMenuList>
           </NavigationMenu>
-          <Button type="button" variant="outline" size="sm" onClick={onLogout}>
-            Logout
-          </Button>
+          {typeof onLogout === 'function' ? (
+            <Button type="button" variant="outline" size="sm" onClick={onLogout}>
+              Logout
+            </Button>
+          ) : null}
         </div>
       </div>
     </header>
