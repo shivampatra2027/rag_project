@@ -8,6 +8,7 @@ const router = express.Router();
 router.use('/summarize', (req, res, next) => {
   if (req.method === 'GET') {
     req.method = 'POST';
+    req.body = req.body && typeof req.body === 'object' ? req.body : {};
   }
   next();
 });
