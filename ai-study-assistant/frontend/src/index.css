@@ -68,3 +68,34 @@ h3 {
     transform: translateY(0);
   }
 }
+
+.chat-scroll {
+  scroll-behavior: smooth;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.chat-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.typing-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 9999px;
+  background: #94a3b8;
+  animation: typing-bounce 1s infinite ease-in-out;
+}
+
+@keyframes typing-bounce {
+  0%,
+  80%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.4;
+  }
+  40% {
+    transform: translateY(-4px);
+    opacity: 1;
+  }
+}
