@@ -19,16 +19,16 @@ function Navbar({ currentPage, onNavigate, onLogout }) {
   ];
 
   return (
-    <header className="sticky top-0 z-40 border-b bg-white/90 backdrop-blur">
-      <div className="mx-auto flex w-full max-w-6xl items-center justify-between px-4 py-3 sm:px-6">
-        <div className="flex items-center gap-2 text-sm font-semibold tracking-wide">
-          <GraduationCap className="h-5 w-5" />
+    <header className="sticky top-0 z-40 border-b border-white/70 bg-white/75 backdrop-blur-xl">
+      <div className="mx-auto flex w-full max-w-6xl flex-wrap items-center justify-between gap-3 px-4 py-3 sm:px-6">
+        <div className="flex items-center gap-2 rounded-full border border-white/80 bg-white/70 px-3 py-1.5 text-sm font-semibold tracking-wide shadow-sm">
+          <GraduationCap className="h-4 w-4 text-cyan-700" />
           AI Study Assistant
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2">
           <NavigationMenu>
-            <NavigationMenuList>
+            <NavigationMenuList className="rounded-full border border-white/80 bg-white/70 p-1 shadow-sm">
               {items.map((item) => {
                 const isActive = currentPage === item.key;
                 return (
@@ -36,9 +36,7 @@ function Navbar({ currentPage, onNavigate, onLogout }) {
                     <NavigationMenuTrigger
                       type="button"
                       onClick={() => onNavigate(item.key)}
-                      className={cn(
-                        isActive ? 'bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground' : ''
-                      )}
+                      className={cn(isActive ? 'bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground' : '')}
                     >
                       {item.label}
                     </NavigationMenuTrigger>

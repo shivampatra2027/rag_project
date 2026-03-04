@@ -17,7 +17,7 @@ const NavigationMenuTrigger = React.forwardRef(({ className, ...props }, ref) =>
   <button
     ref={ref}
     className={cn(
-      'inline-flex h-9 items-center justify-center rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground',
+      'inline-flex h-9 items-center justify-center rounded-full px-3 py-2 text-sm font-semibold transition-all duration-200 hover:bg-accent hover:text-accent-foreground',
       className
     )}
     {...props}

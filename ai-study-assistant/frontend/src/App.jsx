@@ -64,7 +64,7 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-100">
+    <div className="app-shell-bg min-h-screen">
       <Navbar currentPage={currentPage} onNavigate={handleNavigate} />
       <Layout>{appRoutes}</Layout>
     </div>
