@@ -32,7 +32,13 @@ cp .env.example .env
 - `GEMINI_API_KEY` Gemini API key
 - `GEMINI_MODEL` Gemini generation model
 - `GEMINI_EMBEDDING_MODEL` Gemini embedding model
-- `CHROMA_URL` ChromaDB URL
+- `CHROMA_URL` local/self-hosted ChromaDB URL
+- `CHROMA_CLOUD_ENABLED` set `true` to force Chroma Cloud mode
+- `CHROMA_API_KEY` Chroma Cloud API key (`x-chroma-token`)
+- `CHROMA_TENANT` Chroma Cloud tenant
+- `CHROMA_DATABASE` Chroma Cloud database
+- `CHROMA_CLOUD_HOST` Chroma Cloud host (default `api.trychroma.com`)
+- `CHROMA_CLOUD_PORT` Chroma Cloud port (default `443`)
 - `FRONTEND_URL` allowed frontend origin (`*` by default)
 - `OPENAI_API_KEY` optional placeholder (for compatibility with some deployment templates)
 
@@ -59,7 +65,9 @@ Recommended deployment settings:
 - Build command: `npm install`
 - Start command: `npm start`
 - Set all required environment variables in platform dashboard
-- Ensure ChromaDB is reachable from `CHROMA_URL`
+- Use either:
+  - local/self-hosted Chroma via `CHROMA_URL`, or
+  - Chroma Cloud via `CHROMA_API_KEY`, `CHROMA_TENANT`, `CHROMA_DATABASE`
 
 ## Health Check
 - `GET /health`

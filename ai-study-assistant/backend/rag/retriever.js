@@ -1,8 +1,6 @@
 ﻿const axios = require('axios');
-const { ChromaClient } = require('chromadb');
 const { collectionNameForUser } = require('./userCollection');
-
-const CHROMA_URL = process.env.CHROMA_URL || 'http://127.0.0.1:8000';
+const { getChromaClient, getChromaConnectionLabel } = require('./chromaClient');
 
 function getGeminiConfig() {
   const apiKey = (process.env.GEMINI_API_KEY || '').trim();
@@ -66,15 +64,6 @@ function createChromaEmbeddingFunction() {
   };
 }
 
-function getChromaClient() {
-  const parsed = new URL(CHROMA_URL);
-  return new ChromaClient({
-    host: parsed.hostname,
-    port: Number(parsed.port || (parsed.protocol === 'https:' ? 443 : 8000)),
-    ssl: parsed.protocol === 'https:',
-  });
-}
-
 async function retrieveContext(userId, query) {
   if (!query || typeof query !== 'string' || !query.trim()) {
     throw new Error('Query is empty.');
@@ -114,7 +103,7 @@ async function retrieveContext(userId, query) {
     }
 
     if (message.includes('fetch failed') || message.includes('econnrefused')) {
-      throw new Error(`Unable to reach ChromaDB at ${CHROMA_URL}. Ensure local ChromaDB is running.`);
+      throw new Error(`Unable to reach ${getChromaConnectionLabel()}. Ensure your Chroma instance is running.`);
     }
 
     throw new Error(`Failed to retrieve context: ${error.message || 'Unknown error'}`);

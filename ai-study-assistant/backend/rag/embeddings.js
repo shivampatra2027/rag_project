@@ -1,11 +1,10 @@
 ﻿const fs = require('fs');
 const path = require('path');
 const axios = require('axios');
-const { ChromaClient } = require('chromadb');
 const { RecursiveCharacterTextSplitter } = require('@langchain/textsplitters');
 const { collectionNameForUser } = require('./userCollection');
+const { getChromaClient, getChromaConnectionLabel } = require('./chromaClient');
 
-const CHROMA_URL = process.env.CHROMA_URL || 'http://127.0.0.1:8000';
 const LOCAL_CHROMA_DIR = path.join(__dirname, '..', 'chroma_db');
 
 if (!fs.existsSync(LOCAL_CHROMA_DIR)) {
@@ -74,15 +73,6 @@ function createChromaEmbeddingFunction() {
   };
 }
 
-function getChromaClient() {
-  const parsed = new URL(CHROMA_URL);
-  return new ChromaClient({
-    host: parsed.hostname,
-    port: Number(parsed.port || (parsed.protocol === 'https:' ? 443 : 8000)),
-    ssl: parsed.protocol === 'https:',
-  });
-}
-
 async function storeDocument(userId, text) {
   if (!text || typeof text !== 'string' || !text.trim()) {
     throw new Error('Document text is empty.');
@@ -134,8 +124,9 @@ async function storeDocument(userId, text) {
     };
   } catch (error) {
     if (error?.message?.toLowerCase().includes('fetch failed') || error?.message?.includes('ECONNREFUSED')) {
+      const connection = getChromaConnectionLabel();
       throw new Error(
-        `Unable to reach ChromaDB at ${CHROMA_URL}. Start local ChromaDB (persistent) with Docker: docker run -p 8000:8000 -v ${LOCAL_CHROMA_DIR}:/data chromadb/chroma:latest`
+        `Unable to reach ${connection}. Start local ChromaDB (persistent) with Docker: docker run -p 8000:8000 -v ${LOCAL_CHROMA_DIR}:/data chromadb/chroma:latest`
       );
     }
 
