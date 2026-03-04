@@ -1,4 +1,4 @@
-.# AI Study Assistant
+# AI Study Assistant
 
 Full-stack AI study platform with:
 - Google login (JWT auth)
