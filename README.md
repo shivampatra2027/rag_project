@@ -141,9 +141,3 @@ Backend:
 cd ../backend
 npm start
 ```
-
-## 7. Notes
-
-- Keep `JWT_SECRET`, `GEMINI_API_KEY`, and OAuth credentials private.
-- Ensure `GOOGLE_CLIENT_ID` in backend matches `VITE_GOOGLE_CLIENT_ID` in frontend.
-- Upload at least one PDF before using RAG features (quiz/summarize/doubt/predict/revision).
