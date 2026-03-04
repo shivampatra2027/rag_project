@@ -4,7 +4,7 @@ Full-stack AI study platform with:
 - Google login (JWT auth)
 - PDF upload and parsing
 - RAG with ChromaDB..
-- Gemini-powered doubt solving, summaries, quizzes, revision, and exam prediction/.,.
+- Gemini-powered doubt solving, summaries, quizzes, revision, and exam prediction/.,..
 - Multi-user isolation via authenticated `userId`
 
 ## Project Structure
