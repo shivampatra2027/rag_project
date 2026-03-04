@@ -23,7 +23,7 @@ function Upload({ onBack }) {
       setLoading(true);
       setStatus('Uploading...');
       await axios.post(`${API_URL}/api/upload`, formData, {
-        headers: { ...getUserHeaders(), 'Content-Type': 'multipart/form-data' },
+        headers: { ...getUserHeaders() },
       });
       setStatus('Upload successful');
     } catch (error) {
