@@ -8,7 +8,7 @@ Full-stack AI study platform with:
 - Multi-user isolation via authenticated `userId`
 
 ## Project Structure
-
+.
 ```text
 ai-study-assistant/
   backend/
