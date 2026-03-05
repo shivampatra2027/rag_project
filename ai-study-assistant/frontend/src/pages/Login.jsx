@@ -9,6 +9,8 @@ function Login() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const setAuth = useAuthStore((state) => state.setAuth);
+  const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+  const currentOrigin = typeof window !== 'undefined' ? window.location.origin : 'unknown';
 
   const handleSuccess = async (response) => {
     const credential = response?.credential;
@@ -46,10 +48,22 @@ function Login() {
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="flex justify-center">
-            <GoogleLogin
-              onSuccess={handleSuccess}
-              onError={() => setError('Google login failed. Try again.')}
-            />
+            {googleClientId ? (
+              <GoogleLogin onSuccess={handleSuccess} onError={() => setError('Google login failed. Try again.')} />
+            ) : (
+              <p className="text-center text-sm text-red-600 dark:text-red-400">
+                Missing `VITE_GOOGLE_CLIENT_ID` in frontend environment.
+              </p>
+            )}
+          </div>
+          <div className="rounded-md border border-border/80 bg-muted/40 px-3 py-2 text-xs text-muted-foreground">
+            <p>
+              <span className="font-semibold text-foreground">Current origin:</span> {currentOrigin}
+            </p>
+            <p>
+              <span className="font-semibold text-foreground">Google Client ID:</span>{' '}
+              {googleClientId ? 'Loaded' : 'Missing'}
+            </p>
           </div>
           {loading ? (
             <p className="flex items-center justify-center gap-2 text-sm text-muted-foreground">

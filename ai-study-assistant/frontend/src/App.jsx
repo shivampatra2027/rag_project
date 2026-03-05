@@ -2,12 +2,14 @@ import { useEffect, useMemo, useState } from 'react';
 import { Navigate, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import Layout from './components/Layout';
 import Navbar from './components/Navbar';
+import Login from './pages/Login';
 import Home from './pages/Home';
 import Upload from './pages/Upload';
 import Chat from './pages/Chat';
 import Quiz from './pages/Quiz';
 import Revision from './pages/Revision';
 import Prediction from './pages/Prediction';
+import useAuthStore from './store/authStore';
 
 const routeByPage = {
   home: '/',
@@ -46,7 +48,11 @@ function App() {
   const location = useLocation();
   const navigate = useNavigate();
   const [theme, setTheme] = useState(getPreferredTheme);
+  const user = useAuthStore((state) => state.user);
+  const logout = useAuthStore((state) => state.logout);
+  const isAuthenticated = Boolean(user?.id);
   const currentPage = pageByRoute[location.pathname] || 'home';
+  const isLoginRoute = location.pathname === '/login';
 
   useEffect(() => {
     const root = document.documentElement;
@@ -59,9 +65,13 @@ function App() {
 
     return (
       <Routes>
+        <Route path="/login" element={isAuthenticated ? <Navigate to="/" replace /> : <Login />} />
         <Route
           path="/"
           element={
+            !isAuthenticated ? (
+              <Navigate to="/login" replace />
+            ) : (
             <Home
               onOpenUpload={() => navigate('/upload')}
               onOpenChat={() => navigate('/chat')}
@@ -69,17 +79,21 @@ function App() {
               onOpenRevision={() => navigate('/revision')}
               onOpenPrediction={() => navigate('/prediction')}
             />
+            )
           }
         />
-        <Route path="/upload" element={<Upload onBack={backToHome} />} />
-        <Route path="/chat" element={<Chat onBack={backToHome} />} />
-        <Route path="/quiz" element={<Quiz onBack={backToHome} />} />
-        <Route path="/revision" element={<Revision onBack={backToHome} />} />
-        <Route path="/prediction" element={<Prediction onBack={backToHome} />} />
-        <Route path="*" element={<Navigate to="/" replace />} />
+        <Route path="/upload" element={!isAuthenticated ? <Navigate to="/login" replace /> : <Upload onBack={backToHome} />} />
+        <Route path="/chat" element={!isAuthenticated ? <Navigate to="/login" replace /> : <Chat onBack={backToHome} />} />
+        <Route path="/quiz" element={!isAuthenticated ? <Navigate to="/login" replace /> : <Quiz onBack={backToHome} />} />
+        <Route path="/revision" element={!isAuthenticated ? <Navigate to="/login" replace /> : <Revision onBack={backToHome} />} />
+        <Route
+          path="/prediction"
+          element={!isAuthenticated ? <Navigate to="/login" replace /> : <Prediction onBack={backToHome} />}
+        />
+        <Route path="*" element={<Navigate to={isAuthenticated ? '/' : '/login'} replace />} />
       </Routes>
     );
-  }, [navigate]);
+  }, [isAuthenticated, navigate]);
 
   const handleNavigate = (page) => {
     navigate(routeByPage[page] || '/');
@@ -91,8 +105,16 @@ function App() {
 
   return (
     <div className="app-shell-bg min-h-screen">
-      <Navbar currentPage={currentPage} onNavigate={handleNavigate} theme={theme} onToggleTheme={handleToggleTheme} />
-      <Layout>{appRoutes}</Layout>
+      {!isLoginRoute && isAuthenticated ? (
+        <Navbar
+          currentPage={currentPage}
+          onNavigate={handleNavigate}
+          theme={theme}
+          onToggleTheme={handleToggleTheme}
+          onLogout={logout}
+        />
+      ) : null}
+      {isLoginRoute || !isAuthenticated ? appRoutes : <Layout>{appRoutes}</Layout>}
     </div>
   );
 }

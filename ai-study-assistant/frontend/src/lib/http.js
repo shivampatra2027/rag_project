@@ -32,8 +32,26 @@ function getOrCreateAnonymousUserId() {
   return generated;
 }
 
+function getLoggedInUserId() {
+  try {
+    const rawUser = localStorage.getItem('user');
+    if (!rawUser) {
+      return '';
+    }
+
+    const parsedUser = JSON.parse(rawUser);
+    if (parsedUser && typeof parsedUser.id === 'string' && parsedUser.id.trim()) {
+      return parsedUser.id.trim();
+    }
+  } catch (error) {
+    return '';
+  }
+
+  return '';
+}
+
 export function getUserHeaders() {
-  return { 'x-user-id': getOrCreateAnonymousUserId() };
+  return { 'x-user-id': getLoggedInUserId() || getOrCreateAnonymousUserId() };
 }
 
 export default axios;
