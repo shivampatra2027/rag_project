@@ -39,7 +39,7 @@ ai-study-assistant/
 - MongoDB (local or cloud)
 - ChromaDB server running (if using HTTP mode)
 - Google OAuth Client ID
-- Gemini API key
+- Gemini API key.
 
 ## 1. Backend Setup
 
