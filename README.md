@@ -14,7 +14,7 @@ ai-study-assistant/
   backend/
   frontend/
 ```
-
+.
 ## Tech Stack
 
 ### Backend
