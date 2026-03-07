@@ -65,22 +65,22 @@ Full-stack AI study platform with:
                 │   Node.js + Express │
                 │  JWT Authentication │
                 │  PDF Processing     │
-                │  LangChain RAG     │
+                │  LangChain RAG      │
                 └───────┬─────────────┘
                         │
           ┌─────────────┼──────────────┐
-          │                             │
-          ▼                             ▼
+          │                            │
+          ▼                            ▼
 
    ┌──────────────────┐         ┌─────────────────────┐
    │     MongoDB      │         │      Gemini AI      │
    │                  │         │                     │
-   │ User accounts    │         │ LLM responses      │
-   │ Chat history     │         │ Embeddings         │
-   │ Metadata         │         │ Summaries          │
+   │ User accounts    │         │ LLM responses       │
+   │ Chat history     │         │ Embeddings          │
+   │ Metadata         │         │ Summaries           │
    └──────────────────┘         └──────────┬──────────┘
-                                            │
-                                            ▼
+                                           │
+                                           ▼
 
                                   ┌──────────────────┐
                                   │     ChromaDB     │
