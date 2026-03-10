@@ -1,4 +1,4 @@
-# 🧠 AI Study Assistant
+# AI Study Assistant
 
 Full-stack AI study platform with:
 - Google login (JWT auth)
@@ -26,22 +26,22 @@ Full-stack AI study platform with:
 
 ---
 
-## ✨ Features
+## Features
 
 | Feature | Description |
 |---------|-------------|
-| 🔐 **Google Login** | Secure JWT authentication with Google OAuth |
-| 📄 **PDF Upload** | Upload and parse PDF study materials |
-| 💬 **AI Chat Tutor** | Ask doubts with context-aware AI responses |
-| 📝 **AI Summaries** | Automatic document summarization |
-| ❓ **Quiz Generator** | Generate exam-style quizzes from your notes |
-| 📅 **Revision Planner** | AI-powered study schedule aligned to exam dates |
-| 🎯 **Exam Prediction** | Predict high-priority topics and likely questions |
-| 🧠 **RAG Pipeline** | Retrieval Augmented Generation with ChromaDB |
+| **Google Login** | Secure JWT authentication with Google OAuth |
+| **PDF Upload** | Upload and parse PDF study materials |
+| **AI Chat Tutor** | Ask doubts with context-aware AI responses |
+| **AI Summaries** | Automatic document summarization |
+| **Quiz Generator** | Generate exam-style quizzes from your notes |
+| **Revision Planner** | AI-powered study schedule aligned to exam dates |
+| **Exam Prediction** | Predict high-priority topics and likely questions |
+| **RAG Pipeline** | Retrieval Augmented Generation with ChromaDB |
 
 ---
 
-## 🏗 Architecture
+## Architecture
 
 ```
                     ┌──────────────┐
@@ -94,30 +94,30 @@ Full-stack AI study platform with:
 
 ---
 
-## 🎨 UI/UX Design
+## UI/UX Design
 
 The frontend features a modern AI SaaS design inspired by ChatGPT and Perplexity:
 
-- 🌑 **Dark Theme** with glassmorphism effects
-- ✨ **Gradient Accents** (cyan to blue)
-- 🎬 **Smooth Animations** and micro-interactions
-- 📱 **Fully Responsive** design
-- 💎 **Rounded corners** with soft shadows
+- **Dark Theme** with glassmorphism effects
+- **Gradient Accents** (cyan to blue)
+- **Smooth Animations** and micro-interactions
+- **Fully Responsive** design
+- **Rounded corners** with soft shadows
 
 ### Pages
 
 | Page | Features |
 |------|----------|
-| 🏠 **Home** | Hero section with gradient text, tool cards |
-| 📤 **Upload** | Drag & drop zone, progress bar, file preview |
-| 💬 **Chat** | Markdown rendering, typing indicator, animated messages |
-| ❓ **Quiz** | Question cards, progress tracking, navigation |
-| 📅 **Revision** | Day-wise study plans, completion tracking |
-| 🎯 **Prediction** | Topic cards, importance scores, priority badges |
+| **Home** | Hero section with gradient text, tool cards |
+| **Upload** | Drag & drop zone, progress bar, file preview |
+| **Chat** | Markdown rendering, typing indicator, animated messages |
+| **Quiz** | Question cards, progress tracking, navigation |
+| **Revision** | Day-wise study plans, completion tracking |
+| **Prediction** | Topic cards, importance scores, priority badges |
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 ai-study-assistant/
@@ -156,7 +156,7 @@ ai-study-assistant/
 
 ---
 
-## 🛠 Tech Stack
+## Tech Stack
 
 ### Backend
 
@@ -190,7 +190,7 @@ ai-study-assistant/
 
 ---
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
 
@@ -256,7 +256,7 @@ npm run chroma:docker
 
 ---
 
-## 🔐 Authentication Flow
+## Authentication Flow
 
 ```
 User clicks Google Login
@@ -283,7 +283,7 @@ Authorization: Bearer <JWT_TOKEN>
 
 ---
 
-## 📡 API Routes
+## API Routes
 
 ### Public Routes
 
@@ -307,7 +307,7 @@ Authorization: Bearer <JWT_TOKEN>
 
 ---
 
-## 🧪 Example Request
+## Example Request
 
 ### Ask a Doubt
 
@@ -329,7 +329,7 @@ Response:
 
 ---
 
-## ☁️ Deployment
+## Deployment
 
 | Service | Use |
 |---------|-----|
@@ -340,7 +340,7 @@ Response:
 
 ---
 
-## 🔄 RAG Pipeline
+## RAG Pipeline
 
 ```
 ┌─────────────────┐
@@ -395,7 +395,7 @@ Response:
 
 ---
 
-## 🌱 Future Improvements
+## Future Improvements
 
 - [ ] Streaming AI responses for real-time output
 - [ ] AI flashcards generation
@@ -407,13 +407,12 @@ Response:
 
 ---
 
-## 📜 License
+## License
 
 MIT License - feel free to use this project for learning and development.
 
 ---
 
 <p align="center">
-  Made with ❤️ using React, Node.js, and Gemini AI
+  Made using React, Node.js, and Gemini AI
 </p>
-
