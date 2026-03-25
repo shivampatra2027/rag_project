@@ -1,6 +1,12 @@
 # AI Study Assistant
 
+## Preview
+
+![AI Study Assistant Preview](./ai-study-assistant/frontend/public/sc_pc.jpg)
+
+
 Full-stack AI study platform with:
+
 - Google login (JWT auth)
 - PDF upload and parsing
 - RAG with ChromaDB..
@@ -8,6 +14,7 @@ Full-stack AI study platform with:
 - Multi-user isolation via authenticated `userId`
 
 .
+
 <p align="center">
   <img src="https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" alt="React">
   <img src="https://img.shields.io/badge/TailwindCSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" alt="TailwindCSS">
@@ -28,16 +35,16 @@ Full-stack AI study platform with:
 
 ## Features
 
-| Feature | Description |
-|---------|-------------|
-| **Google Login** | Secure JWT authentication with Google OAuth |
-| **PDF Upload** | Upload and parse PDF study materials |
-| **AI Chat Tutor** | Ask doubts with context-aware AI responses |
-| **AI Summaries** | Automatic document summarization |
-| **Quiz Generator** | Generate exam-style quizzes from your notes |
-| **Revision Planner** | AI-powered study schedule aligned to exam dates |
-| **Exam Prediction** | Predict high-priority topics and likely questions |
-| **RAG Pipeline** | Retrieval Augmented Generation with ChromaDB |
+| Feature              | Description                                       |
+| -------------------- | ------------------------------------------------- |
+| **Google Login**     | Secure JWT authentication with Google OAuth       |
+| **PDF Upload**       | Upload and parse PDF study materials              |
+| **AI Chat Tutor**    | Ask doubts with context-aware AI responses        |
+| **AI Summaries**     | Automatic document summarization                  |
+| **Quiz Generator**   | Generate exam-style quizzes from your notes       |
+| **Revision Planner** | AI-powered study schedule aligned to exam dates   |
+| **Exam Prediction**  | Predict high-priority topics and likely questions |
+| **RAG Pipeline**     | Retrieval Augmented Generation with ChromaDB      |
 
 ---
 
@@ -106,14 +113,14 @@ The frontend features a modern AI SaaS design inspired by ChatGPT and Perplexity
 
 ### Pages
 
-| Page | Features |
-|------|----------|
-| **Home** | Hero section with gradient text, tool cards |
-| **Upload** | Drag & drop zone, progress bar, file preview |
-| **Chat** | Markdown rendering, typing indicator, animated messages |
-| **Quiz** | Question cards, progress tracking, navigation |
-| **Revision** | Day-wise study plans, completion tracking |
-| **Prediction** | Topic cards, importance scores, priority badges |
+| Page           | Features                                                |
+| -------------- | ------------------------------------------------------- |
+| **Home**       | Hero section with gradient text, tool cards             |
+| **Upload**     | Drag & drop zone, progress bar, file preview            |
+| **Chat**       | Markdown rendering, typing indicator, animated messages |
+| **Quiz**       | Question cards, progress tracking, navigation           |
+| **Revision**   | Day-wise study plans, completion tracking               |
+| **Prediction** | Topic cards, importance scores, priority badges         |
 
 ---
 
@@ -162,14 +169,14 @@ ai-study-assistant/
 
 <div align="center">
 
-| Technology | Purpose |
-|------------|---------|
-| <img src="https://img.shields.io/badge/Node.js-339933?style=flat&logo=node.js&logoColor=white"> | Runtime |
-| <img src="https://img.shields.io/badge/Express-000000?style=flat&logo=express&logoColor=white"> | Framework |
-| <img src="https://img.shields.io/badge/MongoDB-47A248?style=flat&logo=mongodb&logoColor=white"> | Database |
-| <img src="https://img.shields.io/badge/JWT-000000?style=flat&logo=JSON%20Web%20Tokens&logoColor=white"> | Auth |
-| <img src="https://img.shields.io/badge/LangChain-+green?style=flat"> | LLM Framework |
-| <img src="https://img.shields.io/badge/ChromaDB-000000?style=flat"> | Vector DB |
+| Technology                                                                                              | Purpose       |
+| ------------------------------------------------------------------------------------------------------- | ------------- |
+| <img src="https://img.shields.io/badge/Node.js-339933?style=flat&logo=node.js&logoColor=white">         | Runtime       |
+| <img src="https://img.shields.io/badge/Express-000000?style=flat&logo=express&logoColor=white">         | Framework     |
+| <img src="https://img.shields.io/badge/MongoDB-47A248?style=flat&logo=mongodb&logoColor=white">         | Database      |
+| <img src="https://img.shields.io/badge/JWT-000000?style=flat&logo=JSON%20Web%20Tokens&logoColor=white"> | Auth          |
+| <img src="https://img.shields.io/badge/LangChain-+green?style=flat">                                    | LLM Framework |
+| <img src="https://img.shields.io/badge/ChromaDB-000000?style=flat">                                     | Vector DB     |
 
 </div>
 
@@ -177,14 +184,14 @@ ai-study-assistant/
 
 <div align="center">
 
-| Technology | Purpose |
-|------------|---------|
-| <img src="https://img.shields.io/badge/React-61DAFB?style=flat&logo=react&logoColor=black"> | Framework |
-| <img src="https://img.shields.io/badge/Vite-646CFF?style=flat&logo=vite&logoColor=white"> | Bundler |
-| <img src="https://img.shields.io/badge/TailwindCSS-38B2AC?style=flat&logo=tailwind-css&logoColor=white"> | Styling |
-| <img src="https://img.shields.io/badge/ShadcnUI-black?style=flat"> | Components |
-| <img src="https://img.shields.io/badge/Zustand-000000?style=flat"> | State |
-| <img src="https://img.shields.io/badge/Axios-5A29E4?style=flat&logo=axios&logoColor=white"> | HTTP |
+| Technology                                                                                               | Purpose    |
+| -------------------------------------------------------------------------------------------------------- | ---------- |
+| <img src="https://img.shields.io/badge/React-61DAFB?style=flat&logo=react&logoColor=black">              | Framework  |
+| <img src="https://img.shields.io/badge/Vite-646CFF?style=flat&logo=vite&logoColor=white">                | Bundler    |
+| <img src="https://img.shields.io/badge/TailwindCSS-38B2AC?style=flat&logo=tailwind-css&logoColor=white"> | Styling    |
+| <img src="https://img.shields.io/badge/ShadcnUI-black?style=flat">                                       | Components |
+| <img src="https://img.shields.io/badge/Zustand-000000?style=flat">                                       | State      |
+| <img src="https://img.shields.io/badge/Axios-5A29E4?style=flat&logo=axios&logoColor=white">              | HTTP       |
 
 </div>
 
@@ -287,23 +294,23 @@ Authorization: Bearer <JWT_TOKEN>
 
 ### Public Routes
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| POST | `/api/auth/google` | Google OAuth login |
-| GET | `/api/health` | Health check |
+| Method | Endpoint           | Description        |
+| ------ | ------------------ | ------------------ |
+| POST   | `/api/auth/google` | Google OAuth login |
+| GET    | `/api/health`      | Health check       |
 
 ### Protected Routes (Require JWT)
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| POST | `/api/upload` | Upload PDF document |
-| POST | `/api/doubt` | Ask AI questions |
-| POST | `/api/summarize` | Generate summaries |
-| POST | `/api/quiz` | Create quiz questions |
-| POST | `/api/revision` | Generate study plan |
-| POST | `/api/predict` | Predict exam topics |
-| GET | `/api/chat-history` | Get chat history |
-| POST | `/api/clear-chat` | Clear chat history |
+| Method | Endpoint            | Description           |
+| ------ | ------------------- | --------------------- |
+| POST   | `/api/upload`       | Upload PDF document   |
+| POST   | `/api/doubt`        | Ask AI questions      |
+| POST   | `/api/summarize`    | Generate summaries    |
+| POST   | `/api/quiz`         | Create quiz questions |
+| POST   | `/api/revision`     | Generate study plan   |
+| POST   | `/api/predict`      | Predict exam topics   |
+| GET    | `/api/chat-history` | Get chat history      |
+| POST   | `/api/clear-chat`   | Clear chat history    |
 
 ---
 
@@ -331,12 +338,12 @@ Response:
 
 ## Deployment
 
-| Service | Use |
-|---------|-----|
-| [Vercel](https://vercel.com) | Frontend hosting |
-| [Render](https://render.com) | Backend API hosting |
-| [MongoDB Atlas](https://www.mongodb.com/atlas) | Cloud database |
-| [Docker](https://docker.com) | ChromaDB container |
+| Service                                        | Use                 |
+| ---------------------------------------------- | ------------------- |
+| [Vercel](https://vercel.com)                   | Frontend hosting    |
+| [Render](https://render.com)                   | Backend API hosting |
+| [MongoDB Atlas](https://www.mongodb.com/atlas) | Cloud database      |
+| [Docker](https://docker.com)                   | ChromaDB container  |
 
 ---
 
