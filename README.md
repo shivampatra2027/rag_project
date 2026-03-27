@@ -4,7 +4,6 @@
 
 ![AI Study Assistant Preview](./ai-study-assistant/frontend/public/sc_pc.jpg)
 
-
 Full-stack AI study platform with:
 
 - Google login (JWT auth)
@@ -12,6 +11,7 @@ Full-stack AI study platform with:
 - RAG with ChromaDB..
 - Gemini-powered doubt solving, summaries, quizzes, revision, and exam prediction
 - Multi-user isolation via authenticated `userId`
+- more coming soon..
 
 <p align="center">
   <img src="https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" alt="React">
