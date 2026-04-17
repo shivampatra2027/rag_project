@@ -421,4 +421,3 @@ MIT License - feel free to use this project for learning and development.
 <p align="center">
   Made using React, Node.js, and Gemini AI
 </p>
-.
