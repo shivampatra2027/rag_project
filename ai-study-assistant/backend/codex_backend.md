@@ -1,7 +1,5 @@
 ---
 
-## TASK AUTH — Google Authentication
-
 Goal:
 Authenticate users using Google OAuth instead of email/password.
 
