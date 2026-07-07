@@ -48,56 +48,28 @@ Full-stack AI study platform with:
 
 ## Architecture
 
+```mermaid
+flowchart TB
+
+    User["👤 User<br/>(Browser)"]
+
+    Frontend["Frontend<br/>React + Vite<br/>TailwindCSS<br/>Shadcn UI<br/>Zustand Store<br/>Modern AI UI"]
+
+    Backend["Backend<br/>Node.js + Express<br/>JWT Authentication<br/>PDF Processing<br/>LangChain RAG"]
+
+    Mongo["MongoDB<br/><br/>• User Accounts<br/>• Chat History<br/>• Metadata"]
+
+    Gemini["Gemini AI<br/><br/>• LLM Responses<br/>• Embeddings<br/>• Summaries"]
+
+    Chroma["ChromaDB<br/>Vector Database<br/><br/>• Document Chunks<br/>• Vector Embeddings<br/>• Similarity Search"]
+
+    User --> Frontend
+    Frontend -- REST API --> Backend
+
+    Backend --> Mongo
+    Backend --> Gemini
+    Gemini --> Chroma
 ```
-                    ┌──────────────┐
-                    │     User     │
-                    │  (Browser)   │
-                    └──────┬───────┘
-                           │
-                           ▼
-                 ┌──────────────────┐
-                 │     Frontend     │
-                 │  React + Vite    │
-                 │  TailwindCSS     │
-                 │  Shadcn UI       │
-                 │  Zustand Store   │
-                 │  Modern AI UI    │
-                 └────────┬─────────┘
-                          │ REST API
-                          ▼
-                ┌─────────────────────┐
-                │      Backend        │
-                │   Node.js + Express │
-                │  JWT Authentication │
-                │  PDF Processing     │
-                │  LangChain RAG      │
-                └───────┬─────────────┘
-                        │
-          ┌─────────────┼──────────────┐
-          │                            │
-          ▼                            ▼
-
-   ┌──────────────────┐         ┌─────────────────────┐
-   │     MongoDB      │         │      Gemini AI      │
-   │                  │         │                     │
-   │ User accounts    │         │ LLM responses       │
-   │ Chat history     │         │ Embeddings          │
-   │ Metadata         │         │ Summaries           │
-   └──────────────────┘         └──────────┬──────────┘
-                                           │
-                                           ▼
-
-                                  ┌──────────────────┐
-                                  │     ChromaDB     │
-                                  │  Vector Database │
-                                  │                  │
-                                  │ Document chunks  │
-                                  │ Vector embeddings│
-                                  │ Similarity search│
-                                  └──────────────────┘
-```
-
----
 
 ## UI/UX Design
 
